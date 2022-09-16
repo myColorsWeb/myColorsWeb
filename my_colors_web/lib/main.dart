@@ -29,39 +29,67 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
+  final _colorTextField = const TextField(
+    decoration: InputDecoration(
+        hintText: 'Color | Hue',
+        hintStyle: TextStyle(color: Colors.grey)),
+  );
 
-  void _incrementCounter() {
-    setState(() {
-      _counter++;
-    });
+  final _numOfColorsTextField = TextFormField(
+      decoration: const InputDecoration(
+          hintText: 'Number of Colors',
+          hintStyle: TextStyle(color: Colors.grey)));
+
+  SizedBox _colorTextInput() =>
+      _textFieldContainer(textFormField: _colorTextField);
+
+  SizedBox _numOfColorsInput() =>
+      _textFieldContainer(textFormField: _numOfColorsTextField);
+
+  SizedBox _textFieldContainer({required Widget textFormField}) {
+    return SizedBox(
+      width: MediaQuery.of(context).size.width / 8,
+      child: textFormField,
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text(
-              'You have pushed the button this many times:',
-            ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headline4,
+        appBar: AppBar(
+          title: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(widget.title),
+              const SizedBox(width: 20),
+              ElevatedButton(onPressed: () {}, child: const Text("Random")),
+              const SizedBox(width: 20),
+              ElevatedButton(onPressed: () {}, child: const Icon(Icons.info)),
+              const SizedBox(width: 20),
+              ElevatedButton(
+                  onPressed: () {}, child: const Icon(Icons.favorite)),
+              const SizedBox(width: 20),
+            ],
+          ),
+        ),
+        body: Column(
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: <Widget>[
+                const SizedBox(width: 15),
+                _colorTextInput(),
+                const SizedBox(width: 20),
+                _numOfColorsInput(),
+                const SizedBox(width: 20),
+                Padding(
+                  padding: const EdgeInsets.only(top: 20),
+                  child: ElevatedButton(
+                      onPressed: () {}, child: const Text("Search")),
+                )
+              ],
             ),
           ],
-        ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
-      ),
-    );
+        ));
   }
 }
