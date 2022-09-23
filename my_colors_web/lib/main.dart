@@ -4,6 +4,8 @@ import 'dart:math';
 
 import 'package:my_colors_web/my_color.dart';
 
+import 'utils.dart';
+
 void main() {
   runApp(const MyApp());
 }
@@ -45,23 +47,11 @@ class _MyHomePageState extends State<MyHomePage> {
     myColors = getColors("Random", "5");
   }
 
-  SizedBox _textField(
-      {required String hintText, required TextEditingController controller}) {
-    return SizedBox(
-      width: MediaQuery.of(context).size.width / 7,
-      child: TextFormField(
-          controller: controller,
-          style: const TextStyle(color: Colors.white),
-          cursorColor: Colors.white,
-          decoration: InputDecoration(
-              enabledBorder: const UnderlineInputBorder(
-                  borderSide: BorderSide(
-                color: Colors.white,
-                width: 2,
-              )),
-              hintText: hintText,
-              hintStyle: const TextStyle(color: Colors.white))),
-    );
+  @override
+  void dispose() {
+    super.dispose();
+    _colorController.dispose();
+    _countController.dispose();
   }
 
   Padding configColorGrid(List<MyColor> colors) {
@@ -77,14 +67,12 @@ class _MyHomePageState extends State<MyHomePage> {
             itemCount: colors.length,
             itemBuilder: (_, index) {
               return InkWell(
-                onTap: () {
-                  print(index);
-                },
+                onTap: () {},
                 child: Container(
                   width: 15,
                   height: 15,
-                  decoration:
-                      BoxDecoration(color: _getColorFromHex(colors[index].hex)),
+                  decoration: BoxDecoration(
+                      color: MyColor.getColorFromHex(colors[index].hex)),
                   child: Center(
                       child: Text(
                     colors[index].hex,
@@ -95,19 +83,9 @@ class _MyHomePageState extends State<MyHomePage> {
             }));
   }
 
-  Color? _getColorFromHex(String hexColor) {
-    hexColor = hexColor.replaceAll("#", "");
-    if (hexColor.length == 6) {
-      hexColor = "FF$hexColor";
-    }
-    if (hexColor.length == 8) {
-      return Color(int.parse("0x$hexColor"));
-    }
-    return null;
-  }
-
   @override
   Widget build(BuildContext context) {
+    var textFieldWidth = MediaQuery.of(context).size.width / 7;
     return Scaffold(
         appBar: AppBar(
           title: Row(
@@ -118,9 +96,15 @@ class _MyHomePageState extends State<MyHomePage> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  _textField(hintText: "Color", controller: _colorController),
+                  textField(
+                      width: textFieldWidth,
+                      hintText: "Color",
+                      controller: _colorController),
                   const SizedBox(width: 10),
-                  _textField(hintText: "Count", controller: _countController),
+                  textField(
+                      width: textFieldWidth,
+                      hintText: "Count",
+                      controller: _countController),
                   const SizedBox(width: 10),
                   Padding(
                     padding: const EdgeInsets.only(top: 10),
@@ -182,12 +166,11 @@ class _MyHomePageState extends State<MyHomePage> {
           future: myColors,
           builder: (context, snapshot) {
             if (snapshot.hasData) {
-              print(snapshot.data!.toString());
               return configColorGrid(snapshot.data!);
             } else if (snapshot.hasError) {
-              print('${snapshot.error}');
+              return const Center(child: Icon(Icons.error));
             }
-            return const CircularProgressIndicator();
+            return const Center(child: CircularProgressIndicator());
           },
         ));
   }

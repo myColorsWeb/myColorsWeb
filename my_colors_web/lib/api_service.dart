@@ -12,6 +12,6 @@ Future<List<MyColor>> getColors(String color, String numOfColors) async {
         List<MyColor>.from(l.map((model) => MyColor.fromJson(model)));
     return colors;
   } else {
-    throw Exception('Failed to fetch data');
+    throw Exception('Error: ${response.statusCode}\nOutput: $response');
   }
 }
