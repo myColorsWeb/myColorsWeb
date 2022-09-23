@@ -45,8 +45,8 @@ class _MyHomePageState extends State<MyHomePage> {
 
   final additionalInfo = [
     "Colors to Search",
-    "---------------------------\n"
-        "Red",
+    "---------------------------",
+    "Red",
     "Pink",
     "Purple",
     "Navy",
