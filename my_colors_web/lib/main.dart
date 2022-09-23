@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:my_colors_web/api_service.dart';
 import 'dart:math';
+
+import 'package:my_colors_web/my_color.dart';
 
 void main() {
   runApp(const MyApp());
@@ -34,10 +37,13 @@ class _MyHomePageState extends State<MyHomePage> {
   final _colorController = TextEditingController();
   final _countController = TextEditingController();
 
-  final List<Color> _colors = List.generate(
-      15,
-      (index) => Color.fromRGBO(Random().nextInt(359), Random().nextInt(359),
-          Random().nextInt(359), 1)).toList();
+  Future<List<MyColor>> myColors = Future<List<MyColor>>.value([]);
+
+  @override
+  void initState() {
+    super.initState();
+    myColors = getColors("Random", "5");
+  }
 
   SizedBox _textField(
       {required String hintText, required TextEditingController controller}) {
@@ -58,6 +64,48 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
+  Padding configColorGrid(List<MyColor> colors) {
+    return Padding(
+        padding: const EdgeInsets.all(15.0),
+        child: GridView.builder(
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              childAspectRatio: 1 / .5,
+              crossAxisCount: 4,
+              crossAxisSpacing: 10,
+              mainAxisSpacing: 10,
+            ),
+            itemCount: colors.length,
+            itemBuilder: (_, index) {
+              return InkWell(
+                onTap: () {
+                  print(index);
+                },
+                child: Container(
+                  width: 15,
+                  height: 15,
+                  decoration:
+                      BoxDecoration(color: _getColorFromHex(colors[index].hex)),
+                  child: Center(
+                      child: Text(
+                    colors[index].hex,
+                    style: const TextStyle(color: Colors.white),
+                  )),
+                ),
+              );
+            }));
+  }
+
+  Color? _getColorFromHex(String hexColor) {
+    hexColor = hexColor.replaceAll("#", "");
+    if (hexColor.length == 6) {
+      hexColor = "FF$hexColor";
+    }
+    if (hexColor.length == 8) {
+      return Color(int.parse("0x$hexColor"));
+    }
+    return null;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -70,17 +118,18 @@ class _MyHomePageState extends State<MyHomePage> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  _textField(
-                      hintText: "Color", controller: _colorController),
+                  _textField(hintText: "Color", controller: _colorController),
                   const SizedBox(width: 10),
-                  _textField(
-                      hintText: "Count", controller: _countController),
+                  _textField(hintText: "Count", controller: _countController),
                   const SizedBox(width: 10),
                   Padding(
                     padding: const EdgeInsets.only(top: 10),
                     child: ElevatedButton(
                         onPressed: () {
-                          print("Search Pressed");
+                          setState(() {
+                            myColors = getColors(
+                                _colorController.text, _countController.text);
+                          });
                         },
                         child: const Text("Search")),
                   )
@@ -110,48 +159,36 @@ class _MyHomePageState extends State<MyHomePage> {
               ];
             }, onSelected: (value) {
               switch (value) {
-                case 0:
+                case 0 /*Random*/ :
+                  setState(() {
+                    var random = "Random";
+                    var randIntStr = Random().nextInt(51).toString();
+                    _colorController.text = random;
+                    _countController.text = randIntStr;
+                    myColors = getColors(random, randIntStr);
+                  });
                   break;
-
-                case 1:
+                case 1 /*Favorites*/ :
                   break;
-
-                case 2:
+                case 2 /*Info*/ :
                   break;
-
-                case 3:
+                case 3 /*SIgn Out*/ :
                   break;
               }
             }),
           ],
         ),
-        body: Padding(
-            padding: const EdgeInsets.all(15.0),
-            child: GridView.builder(
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  childAspectRatio: 1 / .5,
-                  crossAxisCount: 4,
-                  crossAxisSpacing: 10,
-                  mainAxisSpacing: 10,
-                ),
-                itemCount: _colors.length,
-                itemBuilder: (_, index) {
-                  return InkWell(
-                    onTap: () {
-                      print(index);
-                    },
-                    child: Container(
-                      width: 15,
-                      height: 15,
-                      decoration:
-                          BoxDecoration(color: Color(_colors[index].value)),
-                      child: Center(
-                          child: Text(
-                        "${_colors[index]}",
-                        style: const TextStyle(color: Colors.white),
-                      )),
-                    ),
-                  );
-                })));
+        body: FutureBuilder<List<MyColor>>(
+          future: myColors,
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              print(snapshot.data!.toString());
+              return configColorGrid(snapshot.data!);
+            } else if (snapshot.hasError) {
+              print('${snapshot.error}');
+            }
+            return const CircularProgressIndicator();
+          },
+        ));
   }
 }
