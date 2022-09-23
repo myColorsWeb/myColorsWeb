@@ -3,6 +3,7 @@ import 'package:my_colors_web/api_service.dart';
 import 'dart:math';
 
 import 'package:my_colors_web/my_color.dart';
+import 'package:flutter/services.dart';
 
 import 'utils.dart';
 
@@ -39,12 +40,35 @@ class _MyHomePageState extends State<MyHomePage> {
   final _colorController = TextEditingController();
   final _countController = TextEditingController();
 
+  var random = "Random";
+  var randIntStr = "5";
+
+  final additionalInfo = [
+    "Colors to Search",
+    "---------------------------\n"
+        "Red",
+    "Pink",
+    "Purple",
+    "Navy",
+    "Blue",
+    "Aqua",
+    "Green",
+    "Lime",
+    "Yellow",
+    "Orange",
+    "Random",
+    "\nHue Color Range: 0 - 359\n",
+    "* Double-Click to Copy\n* Long-Press to Save"
+  ];
+
   Future<List<MyColor>> myColors = Future<List<MyColor>>.value([]);
 
   @override
   void initState() {
     super.initState();
-    myColors = getColors("Random", "5");
+    _colorController.text = random;
+    _countController.text = randIntStr;
+    myColors = getColors(random, randIntStr);
   }
 
   @override
@@ -66,16 +90,23 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
             itemCount: colors.length,
             itemBuilder: (_, index) {
+              String hex = colors[index].hex;
               return InkWell(
-                onTap: () {},
+                onDoubleTap: () {
+                  Clipboard.setData(ClipboardData(text: hex));
+                  toast("Copied $hex");
+                },
+                onLongPress: () {
+                  toast("Saved $hex to Favorites");
+                },
                 child: Container(
                   width: 15,
                   height: 15,
-                  decoration: BoxDecoration(
-                      color: MyColor.getColorFromHex(colors[index].hex)),
+                  decoration:
+                      BoxDecoration(color: MyColor.getColorFromHex(hex)),
                   child: Center(
                       child: Text(
-                    colors[index].hex,
+                    hex,
                     style: const TextStyle(color: Colors.white),
                   )),
                 ),
@@ -112,7 +143,8 @@ class _MyHomePageState extends State<MyHomePage> {
                         onPressed: () {
                           setState(() {
                             myColors = getColors(
-                                _colorController.text, _countController.text);
+                                _colorController.text.toLowerCase(),
+                                _countController.text);
                           });
                         },
                         child: const Text("Search")),
@@ -145,8 +177,7 @@ class _MyHomePageState extends State<MyHomePage> {
               switch (value) {
                 case 0 /*Random*/ :
                   setState(() {
-                    var random = "Random";
-                    var randIntStr = Random().nextInt(51).toString();
+                    randIntStr = Random().nextInt(51).toString();
                     _colorController.text = random;
                     _countController.text = randIntStr;
                     myColors = getColors(random, randIntStr);
@@ -155,8 +186,16 @@ class _MyHomePageState extends State<MyHomePage> {
                 case 1 /*Favorites*/ :
                   break;
                 case 2 /*Info*/ :
+                  showDialogPlus(
+                      context: context,
+                      title: const Text("Info"),
+                      content: Text(additionalInfo.join("\n")),
+                      onSubmitTap: () => Navigator.pop(context),
+                      onCancelTap: null,
+                      submitText: "OK",
+                      cancelText: "");
                   break;
-                case 3 /*SIgn Out*/ :
+                case 3 /*Sign Out*/ :
                   break;
               }
             }),
