@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
+import '../data/local/my_color.dart';
+
 SizedBox textField(
     {required String hintText,
     required TextEditingController controller,
@@ -57,3 +59,36 @@ void showDialogPlus({
 void toast(String msg) {
   Fluttertoast.showToast(msg: msg, toastLength: Toast.LENGTH_LONG);
 }
+
+Padding colorsGrid(
+        {required List<MyColor?> colors,
+        required void Function()? onDoubleTap,
+        required void Function()? onLongPress}) =>
+    Padding(
+        padding: const EdgeInsets.all(15.0),
+        child: GridView.builder(
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              childAspectRatio: 1 / .5,
+              crossAxisCount: 4,
+              crossAxisSpacing: 10,
+              mainAxisSpacing: 10,
+            ),
+            itemCount: colors.length,
+            itemBuilder: (_, index) {
+              String hex = colors[index]!.hex;
+              return InkWell(
+                onDoubleTap: onDoubleTap,
+                onLongPress: onLongPress,
+                child: Container(
+                  width: 15,
+                  height: 15,
+                  decoration:
+                      BoxDecoration(color: MyColor.getColorFromHex(hex)),
+                  child: Center(
+                      child: Text(
+                    hex,
+                    style: const TextStyle(color: Colors.white),
+                  )),
+                ),
+              );
+            }));

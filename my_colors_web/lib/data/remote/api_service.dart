@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:http/http.dart' as http;
-import 'package:my_colors_web/my_color.dart';
+import 'package:my_colors_web/data/local/my_color.dart';
 
 Future<List<MyColor>> getColors(String color, String numOfColors) async {
   final response = await http.get(Uri.parse(
