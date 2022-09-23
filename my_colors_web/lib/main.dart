@@ -118,6 +118,7 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     var textFieldWidth = MediaQuery.of(context).size.width / 7;
     return Scaffold(
+      backgroundColor: Colors.grey[900],
         appBar: AppBar(
           title: Row(
             mainAxisAlignment: MainAxisAlignment.start,
