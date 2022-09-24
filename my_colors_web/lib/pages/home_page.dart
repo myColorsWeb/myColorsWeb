@@ -81,7 +81,7 @@ class _MyHomePageState extends State<MyHomePage> {
               return InkWell(
                 onDoubleTap: () {
                   Clipboard.setData(ClipboardData(text: hex));
-                  toast("Copied $hex");
+                  toast("Copied $hex to Clipboard");
                 },
                 onLongPress: () {
                   FireStore.updateFavorites({hex: hex});
