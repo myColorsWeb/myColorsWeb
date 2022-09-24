@@ -43,7 +43,7 @@ class _FavoritesState extends State<Favorites> {
               return InkWell(
                 onDoubleTap: () {
                   Clipboard.setData(ClipboardData(text: hex));
-                  toast("Copied $hex");
+                  toast("Copied $hex to Clipboard");
                 },
                 onLongPress: () {
                   setState(() {
