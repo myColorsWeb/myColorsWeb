@@ -15,3 +15,4 @@ jobs:
           repoToken: '${{ secrets.GITHUB_TOKEN }}'
           firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_MYCOLORS_BJR03 }}'
           projectId: mycolors-bjr03
+          entryPoint: "./my_colors_web"
