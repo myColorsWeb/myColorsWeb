@@ -1,5 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:my_colors_web/data/local/my_color.dart';
 
 import 'firebase/firebase_options.dart';
 import 'pages/home_page.dart';
@@ -20,7 +21,9 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'myColorsWeb',
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+        colorScheme: ColorScheme.fromSwatch().copyWith(
+            primary: MyColor.getColorFromHex("#53a99a"),
+            secondary: Colors.grey[900]),
       ),
       home: const MyHomePage(title: 'myColorsWeb'),
     );
