@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import '../data/remote/api_service.dart';
 import 'favorites_page.dart';
@@ -23,6 +24,9 @@ class _MyHomePageState extends State<MyHomePage> {
   final _colorController = TextEditingController();
   final _countController = TextEditingController();
 
+  final _emailController = TextEditingController();
+  final _passwordController = TextEditingController();
+
   var random = "Random";
   var randIntStr = "5";
 
@@ -46,16 +50,14 @@ class _MyHomePageState extends State<MyHomePage> {
 
   Future<List<MyColor>> myColors = Future<List<MyColor>>.value([]);
 
+  var currentUser = FirebaseAuth.instance.currentUser;
+
   @override
   void initState() {
     super.initState();
     _colorController.text = random;
     _countController.text = randIntStr;
     myColors = getColors(random, randIntStr);
-
-    // TODO - REMOVE
-    FireAuth.signInUsingEmailPassword(
-        email: "thaballa79@gmail.com", password: "password123");
   }
 
   @override
@@ -157,9 +159,11 @@ class _MyHomePageState extends State<MyHomePage> {
                   value: 2,
                   child: Text("Info"),
                 ),
-                const PopupMenuItem<int>(
-                  value: 2,
-                  child: Text("Sign Out"),
+                PopupMenuItem<int>(
+                  value: 3,
+                  child: currentUser != null
+                      ? const Text("Sign Out")
+                      : const Text("Sign In"),
                 ),
               ];
             }, onSelected: (value) {
@@ -189,7 +193,51 @@ class _MyHomePageState extends State<MyHomePage> {
                       cancelText: "");
                   break;
                 case 3 /*Sign Out*/ :
-                  FireAuth.signOut();
+                  setState(() {
+                    currentUser != null
+                        ? FireAuth.signOut()
+                        : showDialogPlus(
+                            context: context,
+                            title: const Text("Please Sign In",
+                                style: TextStyle(color: Colors.white)),
+                            content: Center(
+                                child: Column(
+                              children: [
+                                textField(
+                                    hintText: "Email",
+                                    controller: _emailController,
+                                    width: textFieldWidth),
+                                textField(
+                                    hintText: "Password",
+                                    controller: _passwordController,
+                                    width: textFieldWidth),
+                                const SizedBox(height: 30),
+                                ElevatedButton(
+                                    onPressed: () {
+                                      FireAuth.signInUsingEmailPassword(
+                                          email: _emailController.text,
+                                          password: _passwordController.text);
+                                      toast("Signed In!");
+                                      Navigator.pop(context);
+                                    },
+                                    child: const Text("Sign In")),
+                                const SizedBox(height: 15),
+                                ElevatedButton(
+                                    onPressed: () {
+                                      FireAuth.registerUsingEmailPassword(
+                                          email: _emailController.text,
+                                          password: _passwordController.text);
+                                      toast("Account Created!");
+                                      Navigator.pop(context);
+                                    },
+                                    child: const Text("Sign Up")),
+                              ],
+                            )),
+                            onSubmitTap: () => Navigator.pop(context),
+                            onCancelTap: null,
+                            submitText: "Cancel",
+                            cancelText: "");
+                  });
                   break;
               }
             }),

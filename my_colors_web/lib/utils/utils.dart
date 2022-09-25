@@ -37,6 +37,7 @@ void showDialogPlus({
     context: context,
     builder: (BuildContext context) => AlertDialog(
       title: title,
+      backgroundColor: Colors.grey[900],
       content:
           SingleChildScrollView(scrollDirection: Axis.vertical, child: content),
       actions: <Widget>[
