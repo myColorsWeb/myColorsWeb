@@ -8,6 +8,8 @@ class MyColor {
   factory MyColor.fromJson(Map<String, dynamic> json) =>
       MyColor(hex: json['hex']);
 
+  static Color? blueishIdk = getColorFromHex("#53a99a");
+
   static Color? getColorFromHex(String hexColor) {
     hexColor = hexColor.replaceAll("#", "");
     if (hexColor.length == 6) {

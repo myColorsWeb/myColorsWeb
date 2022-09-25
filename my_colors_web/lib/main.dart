@@ -22,7 +22,7 @@ class MyApp extends StatelessWidget {
       title: 'myColorsWeb',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSwatch().copyWith(
-            primary: MyColor.getColorFromHex("#53a99a"),
+            primary: MyColor.blueishIdk,
             secondary: Colors.grey[900]),
       ),
       home: const MyHomePage(title: 'myColorsWeb'),

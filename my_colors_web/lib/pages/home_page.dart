@@ -52,10 +52,6 @@ class _MyHomePageState extends State<MyHomePage> {
     _colorController.text = random;
     _countController.text = randIntStr;
     myColors = getColors(random, randIntStr);
-
-    // TODO - REMOVE
-    FireAuth.signInUsingEmailPassword(
-        email: "thaballa79@gmail.com", password: "password123");
   }
 
   @override
@@ -106,105 +102,101 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     var textFieldWidth = MediaQuery.of(context).size.width / 7;
     return Scaffold(
-        backgroundColor: Colors.grey[900],
-        appBar: AppBar(
-          title: Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              Text(widget.title),
-              const SizedBox(width: 20),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  textField(
-                      width: textFieldWidth,
-                      hintText: "Color",
-                      controller: _colorController),
-                  const SizedBox(width: 10),
-                  textField(
-                      width: textFieldWidth,
-                      hintText: "Count",
-                      controller: _countController),
-                  const SizedBox(width: 10),
-                  Padding(
-                    padding: const EdgeInsets.only(top: 10),
-                    child: ElevatedButton(
-                        onPressed: () {
-                          setState(() {
-                            myColors = getColors(
-                                _colorController.text.toLowerCase(),
-                                _countController.text);
-                          });
-                        },
-                        child: const Text("Search")),
-                  )
-                ],
-              )
-            ],
-          ),
-          actions: [
-            PopupMenuButton(itemBuilder: (context) {
-              return [
-                const PopupMenuItem<int>(
-                  value: 0,
-                  child: Text("Random"),
-                ),
-                const PopupMenuItem<int>(
-                  value: 1,
-                  child: Text("Favorites"),
-                ),
-                const PopupMenuItem<int>(
-                  value: 2,
-                  child: Text("Info"),
-                ),
-                const PopupMenuItem<int>(
-                  value: 2,
-                  child: Text("Sign Out"),
-                ),
-              ];
-            }, onSelected: (value) {
-              switch (value) {
-                case 0 /*Random*/ :
-                  setState(() {
-                    randIntStr = Random().nextInt(51).toString();
-                    _colorController.text = random;
-                    _countController.text = randIntStr;
-                    myColors = getColors(random, randIntStr);
-                  });
-                  break;
-                case 1 /*Favorites*/ :
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const Favorites()));
-                  break;
-                case 2 /*Info*/ :
-                  showDialogPlus(
-                      context: context,
-                      title: const Text("Info"),
-                      content: Text(additionalInfo.join("\n")),
-                      onSubmitTap: () => Navigator.pop(context),
-                      onCancelTap: null,
-                      submitText: "OK",
-                      cancelText: "");
-                  break;
-                case 3 /*Sign Out*/ :
-                  FireAuth.signOut();
-                  break;
-              }
-            }),
+      backgroundColor: Colors.grey[900],
+      appBar: AppBar(
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            Text(widget.title),
+            const SizedBox(width: 20),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                textField(
+                    width: textFieldWidth,
+                    hintText: "Color",
+                    controller: _colorController),
+                const SizedBox(width: 10),
+                textField(
+                    width: textFieldWidth,
+                    hintText: "Count",
+                    controller: _countController)
+              ],
+            )
           ],
         ),
-        body: FutureBuilder<List<MyColor>>(
-          future: myColors,
-          builder: (context, snapshot) {
-            if (snapshot.hasData) {
-              return colorsGrid(snapshot.data!);
-            } else if (snapshot.hasError) {
-              return const Center(child: Icon(Icons.error));
+        actions: [
+          PopupMenuButton(itemBuilder: (context) {
+            return [
+              const PopupMenuItem<int>(
+                value: 0,
+                child: Text("Random"),
+              ),
+              const PopupMenuItem<int>(
+                value: 1,
+                child: Text("Favorites"),
+              ),
+              const PopupMenuItem<int>(
+                value: 2,
+                child: Text("Info"),
+              ),
+              const PopupMenuItem<int>(
+                value: 2,
+                child: Text("Sign Out"),
+              ),
+            ];
+          }, onSelected: (value) {
+            switch (value) {
+              case 0 /*Random*/ :
+                setState(() {
+                  randIntStr = Random().nextInt(51).toString();
+                  _colorController.text = random;
+                  _countController.text = randIntStr;
+                  myColors = getColors(random, randIntStr);
+                });
+                break;
+              case 1 /*Favorites*/ :
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => const Favorites()));
+                break;
+              case 2 /*Info*/ :
+                showDialogPlus(
+                    context: context,
+                    title: const Text("Info"),
+                    content: Text(additionalInfo.join("\n")),
+                    onSubmitTap: () => Navigator.pop(context),
+                    onCancelTap: null,
+                    submitText: "OK",
+                    cancelText: "");
+                break;
+              case 3 /*Sign Out*/ :
+                FireAuth.signOut();
+                break;
             }
-            return const Center(child: CircularProgressIndicator());
-          },
-        ));
+          }),
+        ],
+      ),
+      body: FutureBuilder<List<MyColor>>(
+        future: myColors,
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            return colorsGrid(snapshot.data!);
+          } else if (snapshot.hasError) {
+            return const Center(child: Icon(Icons.error));
+          }
+          return const Center(child: CircularProgressIndicator());
+        },
+      ),
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: MyColor.blueishIdk,
+        onPressed: () {
+          setState(() {
+            myColors = getColors(
+                _colorController.text.toLowerCase(), _countController.text);
+          });
+        },
+        child: const Icon(Icons.search),
+      ),
+    );
   }
 }
