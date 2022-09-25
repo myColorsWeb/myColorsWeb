@@ -21,7 +21,7 @@ class _FavoritesState extends State<Favorites> {
     FireStore.getFavDocument().get().then((value) {
       for (var color in value.data()!.values) {
         setState(() {
-          _favColors.add(MyColor(hex: color.toString(), hsl: "", rgb: ""));
+          _favColors.add(MyColor(hex: color.toString()));
         });
       }
     });
