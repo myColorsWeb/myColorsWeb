@@ -98,101 +98,107 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.grey[900],
-      appBar: AppBar(
-        title: Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            Text(widget.title),
-            const SizedBox(width: 20),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                textField(
-                    width: MediaQuery.of(context).size.width / 5,
-                    hintText: "Color",
-                    controller: _colorController),
-                const SizedBox(width: 15),
-                textField(
-                    width: MediaQuery.of(context).size.width / 10,
-                    hintText: "Count",
-                    controller: _countController)
-              ],
-            )
+    return GestureDetector(
+      onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
+      child: Scaffold(
+        backgroundColor: Colors.grey[900],
+        appBar: AppBar(
+          title: Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Text(widget.title),
+              const SizedBox(width: 20),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  textField(
+                      width: MediaQuery.of(context).size.width / 5,
+                      hintText: "Color",
+                      controller: _colorController),
+                  const SizedBox(width: 15),
+                  textField(
+                      width: MediaQuery.of(context).size.width / 10,
+                      hintText: "#",
+                      controller: _countController)
+                ],
+              )
+            ],
+          ),
+          actions: [
+            PopupMenuButton(itemBuilder: (context) {
+              return [
+                const PopupMenuItem<int>(
+                  value: 0,
+                  child: Text("Random"),
+                ),
+                const PopupMenuItem<int>(
+                  value: 1,
+                  child: Text("Favorites"),
+                ),
+                const PopupMenuItem<int>(
+                  value: 2,
+                  child: Text("Info"),
+                ),
+                const PopupMenuItem<int>(
+                  value: 2,
+                  child: Text("Sign Out"),
+                ),
+              ];
+            }, onSelected: (value) {
+              switch (value) {
+                case 0 /*Random*/ :
+                  setState(() {
+                    randIntStr = Random().nextInt(51).toString();
+                    _colorController.text = random;
+                    _countController.text = randIntStr;
+                    myColors = getColors(random, randIntStr);
+                  });
+                  break;
+                case 1 /*Favorites*/ :
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const Favorites()));
+                  break;
+                case 2 /*Info*/ :
+                  showDialogPlus(
+                      context: context,
+                      title: const Text("Info"),
+                      content: Text(additionalInfo.join("\n")),
+                      onSubmitTap: () => Navigator.pop(context),
+                      onCancelTap: null,
+                      submitText: "OK",
+                      cancelText: "");
+                  break;
+                case 3 /*Sign Out*/ :
+                  FireAuth.signOut();
+                  break;
+              }
+            }),
           ],
         ),
-        actions: [
-          PopupMenuButton(itemBuilder: (context) {
-            return [
-              const PopupMenuItem<int>(
-                value: 0,
-                child: Text("Random"),
-              ),
-              const PopupMenuItem<int>(
-                value: 1,
-                child: Text("Favorites"),
-              ),
-              const PopupMenuItem<int>(
-                value: 2,
-                child: Text("Info"),
-              ),
-              const PopupMenuItem<int>(
-                value: 2,
-                child: Text("Sign Out"),
-              ),
-            ];
-          }, onSelected: (value) {
-            switch (value) {
-              case 0 /*Random*/ :
-                setState(() {
-                  randIntStr = Random().nextInt(51).toString();
-                  _colorController.text = random;
-                  _countController.text = randIntStr;
-                  myColors = getColors(random, randIntStr);
-                });
-                break;
-              case 1 /*Favorites*/ :
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => const Favorites()));
-                break;
-              case 2 /*Info*/ :
-                showDialogPlus(
-                    context: context,
-                    title: const Text("Info"),
-                    content: Text(additionalInfo.join("\n")),
-                    onSubmitTap: () => Navigator.pop(context),
-                    onCancelTap: null,
-                    submitText: "OK",
-                    cancelText: "");
-                break;
-              case 3 /*Sign Out*/ :
-                FireAuth.signOut();
-                break;
+        body: FutureBuilder<List<MyColor>>(
+          future: myColors,
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              return colorsGrid(snapshot.data!);
+            } else if (snapshot.hasError) {
+              return const Center(child: Icon(Icons.error));
             }
-          }),
-        ],
-      ),
-      body: FutureBuilder<List<MyColor>>(
-        future: myColors,
-        builder: (context, snapshot) {
-          if (snapshot.hasData) {
-            return colorsGrid(snapshot.data!);
-          } else if (snapshot.hasError) {
-            return const Center(child: Icon(Icons.error));
-          }
-          return const Center(child: CircularProgressIndicator());
-        },
-      ),
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: MyColor.blueishIdk,
-        onPressed: () {
-          setState(() {
-            myColors = getColors(
-                _colorController.text.toLowerCase(), _countController.text);
-          });
-        },
-        child: const Icon(Icons.search),
+            return const Center(child: CircularProgressIndicator());
+          },
+        ),
+        floatingActionButton: FloatingActionButton(
+          backgroundColor: MyColor.blueishIdk,
+          onPressed: () {
+            FocusManager.instance.primaryFocus?.unfocus();
+            setState(() {
+              myColors = getColors(
+                  _colorController.text.toLowerCase(), _countController.text);
+            });
+          },
+          child: const Icon(Icons.search),
+        ),
       ),
     );
   }
