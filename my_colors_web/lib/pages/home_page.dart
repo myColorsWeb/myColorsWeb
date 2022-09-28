@@ -11,6 +11,8 @@ import 'package:flutter/services.dart';
 import '../firebase/firestore.dart';
 import '../utils/utils.dart';
 
+import 'package:animated_text_kit/animated_text_kit.dart';
+
 class MyHomePage extends StatefulWidget {
   const MyHomePage({Key? key, required this.title}) : super(key: key);
 
@@ -118,6 +120,44 @@ class _MyHomePageState extends State<MyHomePage> {
         cancelText: "");
   }
 
+  SizedBox _myColorsAnimated(BuildContext context) {
+    return SizedBox(
+      width: MediaQuery.of(context).size.width / 10,
+      child: TextLiquidFill(
+        loadDuration: const Duration(milliseconds: 1000),
+        waveDuration: const Duration(milliseconds: 750),
+        text: 'myColorsWeb',
+        waveColor: Colors.white,
+        boxBackgroundColor: MyColor.blueishIdk!,
+        textStyle: const TextStyle(
+          fontWeight: FontWeight.bold,
+        ),
+      ),
+    );
+  }
+
+  SizedBox _colorizeAnimate(BuildContext context, String text) {
+    List<Color> colorizeColors = [
+      Colors.white,
+      Colors.white,
+      Colors.green,
+      Colors.pink,
+      Colors.blue,
+    ];
+    const colorizeTextStyle = TextStyle(fontSize: 20);
+    return SizedBox(
+      child: AnimatedTextKit(
+        animatedTexts: [
+          ColorizeAnimatedText(text,
+              textStyle: colorizeTextStyle,
+              colors: colorizeColors,
+              textAlign: TextAlign.center),
+        ],
+        isRepeatingAnimation: false,
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -128,7 +168,7 @@ class _MyHomePageState extends State<MyHomePage> {
           title: Row(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              Text(widget.title),
+              _colorizeAnimate(context, "myColorsWeb"),
               const SizedBox(width: 20),
               Form(
                 key: _formKey,
@@ -153,7 +193,9 @@ class _MyHomePageState extends State<MyHomePage> {
                           return null;
                         },
                         onFieldSubmitted: (s) {
-                          _formKey.currentState!.validate();
+                          if (_formKey.currentState!.validate()) {
+                            search();
+                          }
                         }),
                     const SizedBox(width: 15),
                     textField(
@@ -252,7 +294,20 @@ class _MyHomePageState extends State<MyHomePage> {
             if (snapshot.hasData) {
               return colorsGrid(snapshot.data!);
             } else if (snapshot.hasError) {
-              return const Center(child: Icon(Icons.error));
+              return Center(
+                  child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Icon(Icons.error, size: 60, color: Colors.white),
+                  const SizedBox(height: 20),
+                  const Text(
+                      "Something went wrong. Reload the page and please try again.",
+                      style: TextStyle(color: Colors.white, fontSize: 25)),
+                  const SizedBox(height: 10),
+                  Text("Error: ${snapshot.error}",
+                      style: const TextStyle(color: Colors.white, fontSize: 15))
+                ],
+              ));
             }
             return const Center(child: CircularProgressIndicator());
           },
@@ -261,7 +316,9 @@ class _MyHomePageState extends State<MyHomePage> {
           backgroundColor: MyColor.blueishIdk,
           onPressed: () {
             FocusManager.instance.primaryFocus?.unfocus();
-            search();
+            if (_formKey.currentState!.validate()) {
+              search();
+            }
           },
           child: const Icon(Icons.search),
         ),
