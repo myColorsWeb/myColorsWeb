@@ -20,10 +20,10 @@ class FireAuth {
     } on FirebaseAuthException catch (e) {
       switch (e.code) {
         case 'weak-password':
-          toast('The password provided is too weak.');
+          makeToast('The password provided is too weak.');
           break;
         case 'email-already-in-use':
-          toast('An account already exists with this email.');
+          makeToast('An account already exists with this email.');
           break;
       }
     }
@@ -42,13 +42,13 @@ class FireAuth {
     } on FirebaseAuthException catch (e) {
       switch (e.code) {
         case 'user-not-found':
-          toast('No user found for that email.');
+          makeToast('No user found for that email.');
           break;
         case 'wrong-password':
-          toast('Wrong password provided.');
+          makeToast('Wrong password provided.');
           break;
         case 'user-disabled':
-          toast('Account is disabled. Please contact the admin.');
+          makeToast('Account is disabled. Please contact the admin.');
           break;
       }
     }
@@ -63,9 +63,9 @@ class FireAuth {
         user
             .sendEmailVerification()
             .onError((error, stackTrace) => dev.log(error.toString()));
-        toast("A new verification email has been sent to: ${user.email}");
+        makeToast("A new verification email has been sent to: ${user.email}");
       } else {
-        toast('Your email has already been verified.');
+        makeToast('Your email has already been verified.');
       }
     }
   }
@@ -76,7 +76,7 @@ class FireAuth {
 
   static void deleteUserAccount() {
     FirebaseAuth.instance.currentUser?.delete().whenComplete(() {
-      toast("Account has been deleted.");
+      makeToast("Account has been deleted.");
     });
   }
 
@@ -84,14 +84,14 @@ class FireAuth {
     User? user = FirebaseAuth.instance.currentUser;
     user!
         .updateEmail(newEmail)
-        .then((value) => toast("Email has been updated."));
+        .then((value) => makeToast("Email has been updated."));
   }
 
   static sendResetPasswordLink({required String email}) async {
     final auth = FirebaseAuth.instance;
     await auth
         .sendPasswordResetEmail(email: email)
-        .whenComplete(() => toast("A link has been sent to $email"))
+        .whenComplete(() => makeToast("A link has been sent to $email"))
         .onError((error, stackTrace) => dev.log(error.toString()));
   }
 }

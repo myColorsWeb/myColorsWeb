@@ -6,11 +6,17 @@ import '../data/local/my_color.dart';
 SizedBox textField(
     {required String hintText,
     required TextEditingController controller,
+    required TextInputAction? textInputAction,
+    required void Function(String)? onFieldSubmitted,
+    required String? Function(String?)? validator,
     required double width}) {
   return SizedBox(
     width: width,
     child: TextFormField(
+        onFieldSubmitted: onFieldSubmitted,
         controller: controller,
+        textInputAction: textInputAction,
+        validator: validator,
         style: const TextStyle(color: Colors.white),
         cursorColor: Colors.white,
         decoration: InputDecoration(
@@ -36,6 +42,7 @@ void showDialogPlus({
   showDialog(
     context: context,
     builder: (BuildContext context) => AlertDialog(
+      backgroundColor: Colors.grey[900],
       title: title,
       content:
           SingleChildScrollView(scrollDirection: Axis.vertical, child: content),
@@ -49,14 +56,15 @@ void showDialogPlus({
         if (onSubmitTap != null)
           TextButton(
             onPressed: () => onSubmitTap(),
-            child: Text(submitText, style: const TextStyle(color: Colors.blue)),
+            child:
+                Text(submitText, style: TextStyle(color: MyColor.blueishIdk)),
           ),
       ],
     ),
   );
 }
 
-void toast(String msg) {
+void makeToast(String msg) {
   Fluttertoast.showToast(msg: msg, toastLength: Toast.LENGTH_LONG);
 }
 

@@ -43,14 +43,14 @@ class _FavoritesState extends State<Favorites> {
               return InkWell(
                 onDoubleTap: () {
                   Clipboard.setData(ClipboardData(text: hex));
-                  toast("Copied $hex to Clipboard");
+                  makeToast("Copied $hex to Clipboard");
                 },
                 onLongPress: () {
                   setState(() {
                     _favColors.remove(colors[index]);
                   });
                   FireStore.deleteFavColor(hex);
-                  toast("Deleted $hex from Favorites");
+                  makeToast("Deleted $hex from Favorites");
                 },
                 child: Container(
                   width: 15,

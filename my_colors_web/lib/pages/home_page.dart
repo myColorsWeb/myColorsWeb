@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import '../data/remote/api_service.dart';
 import 'favorites_page.dart';
@@ -26,20 +27,22 @@ class _MyHomePageState extends State<MyHomePage> {
   var random = "Random";
   var randIntStr = "5";
 
+  var isSignedIn = FirebaseAuth.instance.currentUser != null;
+
+  final _formKey = GlobalKey<FormState>();
+
   final additionalInfo = [
-    "Colors to Search",
-    "---------------------------",
-    "Red",
-    "Pink",
-    "Purple",
-    "Navy",
-    "Blue",
-    "Aqua",
-    "Green",
-    "Lime",
-    "Yellow",
-    "Orange",
-    "Random",
+    "RED",
+    "PINK",
+    "PURPLE",
+    "NAVY",
+    "BLUE",
+    "AQUA",
+    "GREEN",
+    "LIME",
+    "YELLOW",
+    "ORANGE",
+    "RANDOM",
     "\nHue Color Range: 0 - 359\n",
     "* Double-Click to Copy\n* Long-Press to Save"
   ];
@@ -75,11 +78,11 @@ class _MyHomePageState extends State<MyHomePage> {
               return InkWell(
                 onDoubleTap: () {
                   Clipboard.setData(ClipboardData(text: hex));
-                  toast("Copied $hex to Clipboard");
+                  makeToast("Copied $hex to Clipboard");
                 },
                 onLongPress: () {
                   FireStore.updateFavorites({hex: hex});
-                  toast("Saved $hex to Favorites");
+                  makeToast("Saved $hex to Favorites");
                 },
                 child: Container(
                   width: 15,
@@ -96,6 +99,25 @@ class _MyHomePageState extends State<MyHomePage> {
             }));
   }
 
+  void search() {
+    setState(() {
+      myColors =
+          getColors(_colorController.text.toLowerCase(), _countController.text);
+    });
+  }
+
+  void showInfo() {
+    showDialogPlus(
+        context: context,
+        title: Text("Colors to Search", style: TextStyle(color: MyColor.blueishIdk)),
+        content: Text(additionalInfo.join("\n"),
+            style: TextStyle(color: MyColor.blueishIdk)),
+        onSubmitTap: () => Navigator.pop(context),
+        onCancelTap: null,
+        submitText: "OK",
+        cancelText: "");
+  }
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -108,19 +130,55 @@ class _MyHomePageState extends State<MyHomePage> {
             children: [
               Text(widget.title),
               const SizedBox(width: 20),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  textField(
-                      width: MediaQuery.of(context).size.width / 5,
-                      hintText: "Color",
-                      controller: _colorController),
-                  const SizedBox(width: 15),
-                  textField(
-                      width: MediaQuery.of(context).size.width / 10,
-                      hintText: "#",
-                      controller: _countController)
-                ],
+              Form(
+                key: _formKey,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    textField(
+                        width: MediaQuery.of(context).size.width / 5,
+                        hintText: "Color",
+                        controller: _colorController,
+                        textInputAction: TextInputAction.done,
+                        validator: (s) {
+                          if (s == null || s.isEmpty) {
+                            return "";
+                          } else if (!additionalInfo
+                              .contains(s.toUpperCase())) {
+                            makeToast("Please enter a valid color");
+                            showInfo();
+                            return "";
+                          }
+                          return null;
+                        },
+                        onFieldSubmitted: (s) {
+                          if (!additionalInfo.contains(s.toUpperCase())) {
+                            showInfo();
+                          }
+                        }),
+                    const SizedBox(width: 15),
+                    textField(
+                        width: MediaQuery.of(context).size.width / 10,
+                        hintText: "#",
+                        controller: _countController,
+                        textInputAction: TextInputAction.done,
+                        validator: (s) {
+                          if (s == null || s.isEmpty) {
+                            makeToast("Please provide a count");
+                            return "";
+                          } else if (int.tryParse(s) == null) {
+                            makeToast("Numbers only");
+                            return "";
+                          }
+                          return null;
+                        },
+                        onFieldSubmitted: (s) {
+                          if (_formKey.currentState!.validate()) {
+                            search();
+                          }
+                        })
+                  ],
+                ),
               )
             ],
           ),
@@ -139,9 +197,11 @@ class _MyHomePageState extends State<MyHomePage> {
                   value: 2,
                   child: Text("Info"),
                 ),
-                const PopupMenuItem<int>(
-                  value: 2,
-                  child: Text("Sign Out"),
+                PopupMenuItem<int>(
+                  value: 3,
+                  child: isSignedIn
+                      ? const Text("Sign Out")
+                      : const Text("Sign In"),
                 ),
               ];
             }, onSelected: (value) {
@@ -161,17 +221,20 @@ class _MyHomePageState extends State<MyHomePage> {
                           builder: (context) => const Favorites()));
                   break;
                 case 2 /*Info*/ :
-                  showDialogPlus(
-                      context: context,
-                      title: const Text("Info"),
-                      content: Text(additionalInfo.join("\n")),
-                      onSubmitTap: () => Navigator.pop(context),
-                      onCancelTap: null,
-                      submitText: "OK",
-                      cancelText: "");
+                  showInfo();
                   break;
                 case 3 /*Sign Out*/ :
-                  FireAuth.signOut();
+                  if (isSignedIn) {
+                    FireAuth.signOut();
+                    setState(() {
+                      isSignedIn = false;
+                    });
+                  } else {
+                    setState(() {
+                      isSignedIn = true;
+                    });
+                    // TODO - Launch Sign Up / In page
+                  }
                   break;
               }
             }),
@@ -192,10 +255,7 @@ class _MyHomePageState extends State<MyHomePage> {
           backgroundColor: MyColor.blueishIdk,
           onPressed: () {
             FocusManager.instance.primaryFocus?.unfocus();
-            setState(() {
-              myColors = getColors(
-                  _colorController.text.toLowerCase(), _countController.text);
-            });
+            search();
           },
           child: const Icon(Icons.search),
         ),
