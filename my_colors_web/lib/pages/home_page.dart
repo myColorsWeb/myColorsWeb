@@ -43,8 +43,7 @@ class _MyHomePageState extends State<MyHomePage> {
     "YELLOW",
     "ORANGE",
     "RANDOM",
-    "\nHue Color Range: 0 - 359\n",
-    "* Double-Click to Copy\n* Long-Press to Save"
+    "\n* Double-Click to Copy\n* Long-Press to Save"
   ];
 
   Future<List<MyColor>> myColors = Future<List<MyColor>>.value([]);
@@ -109,7 +108,8 @@ class _MyHomePageState extends State<MyHomePage> {
   void showInfo() {
     showDialogPlus(
         context: context,
-        title: Text("Colors to Search", style: TextStyle(color: MyColor.blueishIdk)),
+        title: Text("Colors to Search",
+            style: TextStyle(color: MyColor.blueishIdk)),
         content: Text(additionalInfo.join("\n"),
             style: TextStyle(color: MyColor.blueishIdk)),
         onSubmitTap: () => Navigator.pop(context),
@@ -136,6 +136,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     textField(
+                        context: context,
                         width: MediaQuery.of(context).size.width / 5,
                         hintText: "Color",
                         controller: _colorController,
@@ -152,12 +153,11 @@ class _MyHomePageState extends State<MyHomePage> {
                           return null;
                         },
                         onFieldSubmitted: (s) {
-                          if (!additionalInfo.contains(s.toUpperCase())) {
-                            showInfo();
-                          }
+                          _formKey.currentState!.validate();
                         }),
                     const SizedBox(width: 15),
                     textField(
+                        context: context,
                         width: MediaQuery.of(context).size.width / 10,
                         hintText: "#",
                         controller: _countController,
@@ -169,6 +169,12 @@ class _MyHomePageState extends State<MyHomePage> {
                           } else if (int.tryParse(s) == null) {
                             makeToast("Numbers only");
                             return "";
+                          } else {
+                            if (int.parse(s) < 2) {
+                              _countController.text = "2";
+                            } else if (int.parse(s) > 51) {
+                              _countController.text = "51";
+                            }
                           }
                           return null;
                         },

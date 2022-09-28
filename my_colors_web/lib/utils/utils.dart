@@ -4,7 +4,8 @@ import 'package:fluttertoast/fluttertoast.dart';
 import '../data/local/my_color.dart';
 
 SizedBox textField(
-    {required String hintText,
+    {required BuildContext context,
+    required String hintText,
     required TextEditingController controller,
     required TextInputAction? textInputAction,
     required void Function(String)? onFieldSubmitted,
@@ -12,21 +13,26 @@ SizedBox textField(
     required double width}) {
   return SizedBox(
     width: width,
-    child: TextFormField(
-        onFieldSubmitted: onFieldSubmitted,
-        controller: controller,
-        textInputAction: textInputAction,
-        validator: validator,
-        style: const TextStyle(color: Colors.white),
-        cursorColor: Colors.white,
-        decoration: InputDecoration(
-            enabledBorder: const UnderlineInputBorder(
-                borderSide: BorderSide(
-              color: Colors.white,
-              width: 2,
-            )),
-            hintText: hintText,
-            hintStyle: const TextStyle(color: Colors.white))),
+    child: Theme(
+      data: Theme.of(context).copyWith(
+          textSelectionTheme:
+              const TextSelectionThemeData(selectionColor: Colors.grey)),
+      child: TextFormField(
+          onFieldSubmitted: onFieldSubmitted,
+          controller: controller,
+          textInputAction: textInputAction,
+          validator: validator,
+          style: const TextStyle(color: Colors.white),
+          cursorColor: Colors.white,
+          decoration: InputDecoration(
+              enabledBorder: const UnderlineInputBorder(
+                  borderSide: BorderSide(
+                color: Colors.white,
+                width: 2,
+              )),
+              hintText: hintText,
+              hintStyle: const TextStyle(color: Colors.white))),
+    ),
   );
 }
 
@@ -100,3 +106,9 @@ Padding colorsGrid(
                 ),
               );
             }));
+
+extension Range on int {
+  bool isBetween(int from, int to) {
+    return from < this && this < to;
+  }
+}
