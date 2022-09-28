@@ -49,8 +49,6 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   void initState() {
     super.initState();
-    _colorController.text = random;
-    _countController.text = randIntStr;
     myColors = getColors(random, randIntStr);
   }
 
@@ -100,7 +98,6 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    var textFieldWidth = MediaQuery.of(context).size.width / 7;
     return Scaffold(
       backgroundColor: Colors.grey[900],
       appBar: AppBar(
@@ -113,12 +110,12 @@ class _MyHomePageState extends State<MyHomePage> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 textField(
-                    width: textFieldWidth,
+                    width: MediaQuery.of(context).size.width / 5,
                     hintText: "Color",
                     controller: _colorController),
-                const SizedBox(width: 10),
+                const SizedBox(width: 15),
                 textField(
-                    width: textFieldWidth,
+                    width: MediaQuery.of(context).size.width / 10,
                     hintText: "Count",
                     controller: _countController)
               ],
