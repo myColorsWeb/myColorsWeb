@@ -196,6 +196,19 @@ class _MyHomePageState extends State<MyHomePage> {
         ));
   }
 
+  Widget showSearchButtonAppBar() {
+    var shouldShow = MediaQuery.of(context).size.width >= 500;
+    if (shouldShow) {
+      return ElevatedButton(
+          onPressed: () {},
+          child: const Text(
+            "Search",
+            style: TextStyle(color: Colors.white),
+          ));
+    }
+    return const SizedBox();
+  }
+
   List<Widget> appBarChildren() => [
         textField(
             context: context,
@@ -248,7 +261,9 @@ class _MyHomePageState extends State<MyHomePage> {
               if (_formKey.currentState!.validate()) {
                 search();
               }
-            })
+            }),
+        const SizedBox(width: 15),
+        showSearchButtonAppBar()
       ];
 
   List<Widget>? appBarActions() => [
@@ -373,7 +388,9 @@ class _MyHomePageState extends State<MyHomePage> {
             return const Center(child: CircularProgressIndicator());
           },
         ),
-        floatingActionButton: FloatingActionButton(
+        floatingActionButton: 
+        MediaQuery.of(context).size.width < 500 ? 
+        FloatingActionButton(
           backgroundColor: MyColor.blueishIdk,
           onPressed: () {
             FocusManager.instance.primaryFocus?.unfocus();
@@ -382,7 +399,7 @@ class _MyHomePageState extends State<MyHomePage> {
             }
           },
           child: const Icon(Icons.search),
-        ),
+        ) : null,
       ),
     );
   }
