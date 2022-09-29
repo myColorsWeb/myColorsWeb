@@ -66,15 +66,10 @@ class _MyHomePageState extends State<MyHomePage> {
     _countController.dispose();
   }
 
-  void search({bool searchRandom = false}) {
-    randIntStr = (Random().nextInt(12) + 2).toString();
+  void search() {
     setState(() {
-      if (searchRandom) {
-        myColors = getColors(random, randIntStr);
-      } else {
-        myColors = getColors(
-            _colorController.text.toLowerCase(), _countController.text);
-      }
+      myColors =
+          getColors(_colorController.text.toLowerCase(), _countController.text);
     });
   }
 
