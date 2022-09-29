@@ -206,8 +206,8 @@ class _MyHomePageState extends State<MyHomePage> {
                 backgroundColor:
                     MaterialStateProperty.all<Color>(Colors.white)),
             onPressed: () {
+              FocusManager.instance.primaryFocus?.unfocus();
               if(_formKey.currentState!.validate()) {
-                FocusManager.instance.primaryFocus?.unfocus();
                 search();
               }
             },
