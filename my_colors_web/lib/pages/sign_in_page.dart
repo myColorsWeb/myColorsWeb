@@ -37,7 +37,7 @@ class _SignInPageState extends State<SignInPage> {
               child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    if (isScreenSize500Above(context))
+                    if (isScreenWidth500Above(context))
                       Lottie.asset('arrow_up_lottie.json'),
                     Text("Sign In",
                         style:
