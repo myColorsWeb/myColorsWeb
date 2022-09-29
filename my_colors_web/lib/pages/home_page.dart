@@ -343,6 +343,7 @@ class _MyHomePageState extends State<MyHomePage> {
           const SizedBox(height: 20),
           const Text("Something went wrong.",
               style: TextStyle(color: Colors.white, fontSize: 25)),
+          const SizedBox(height: 5),
           const Text("Reload the page and try again.",
               style: TextStyle(color: Colors.white, fontSize: 25)),
           const SizedBox(height: 10),
