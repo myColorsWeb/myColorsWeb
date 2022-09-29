@@ -24,7 +24,6 @@ class _SignInPageState extends State<SignUpPage> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
-              const SizedBox(width: 30),
               Center(
                 child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -34,7 +33,7 @@ class _SignInPageState extends State<SignUpPage> {
                               color: MyColor.blueishIdk, fontSize: 30)),
                       const SizedBox(height: 15),
                       Text(
-                          "Access your Favorites on your Android phone via myColors",
+                          "Access your Favorites via myColors for Android",
                           style: TextStyle(
                               color: MyColor.blueishIdk, fontSize: 14)),
                       const SizedBox(height: 77),
@@ -46,7 +45,7 @@ class _SignInPageState extends State<SignUpPage> {
                           validator: (s) {
                             return null;
                           },
-                          width: MediaQuery.of(context).size.width / 3.5,
+                          width: MediaQuery.of(context).size.width / 2,
                           color: MyColor.blueishIdk!),
                       const SizedBox(height: 20),
                       textField(
@@ -57,7 +56,7 @@ class _SignInPageState extends State<SignUpPage> {
                           validator: (s) {
                             return null;
                           },
-                          width: MediaQuery.of(context).size.width / 3.5,
+                          width: MediaQuery.of(context).size.width / 2,
                           color: MyColor.blueishIdk!),
                       const SizedBox(height: 20),
                       textField(
@@ -68,7 +67,7 @@ class _SignInPageState extends State<SignUpPage> {
                           validator: (s) {
                             return null;
                           },
-                          width: MediaQuery.of(context).size.width / 3.5,
+                          width: MediaQuery.of(context).size.width / 2,
                           color: MyColor.blueishIdk!),
                       const SizedBox(height: 77),
                       ElevatedButton(
