@@ -199,12 +199,17 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget showSearchButtonAppBar() {
     var shouldShow = MediaQuery.of(context).size.width >= 500;
     if (shouldShow) {
-      return ElevatedButton(
-          onPressed: () {},
-          child: const Text(
-            "Search",
-            style: TextStyle(color: Colors.white),
-          ));
+      return Padding(
+        padding: const EdgeInsets.only(top: 15),
+        child: ElevatedButton(
+            style: ButtonStyle(
+                backgroundColor: MaterialStateProperty.all<Color>(Colors.white)),
+            onPressed: () {},
+            child: Text(
+              "Search",
+              style: TextStyle(color: MyColor.blueishIdk),
+            )),
+      );
     }
     return const SizedBox();
   }
@@ -388,18 +393,18 @@ class _MyHomePageState extends State<MyHomePage> {
             return const Center(child: CircularProgressIndicator());
           },
         ),
-        floatingActionButton: 
-        MediaQuery.of(context).size.width < 500 ? 
-        FloatingActionButton(
-          backgroundColor: MyColor.blueishIdk,
-          onPressed: () {
-            FocusManager.instance.primaryFocus?.unfocus();
-            if (_formKey.currentState!.validate()) {
-              search();
-            }
-          },
-          child: const Icon(Icons.search),
-        ) : null,
+        floatingActionButton: MediaQuery.of(context).size.width < 500
+            ? FloatingActionButton(
+                backgroundColor: MyColor.blueishIdk,
+                onPressed: () {
+                  FocusManager.instance.primaryFocus?.unfocus();
+                  if (_formKey.currentState!.validate()) {
+                    search();
+                  }
+                },
+                child: const Icon(Icons.search),
+              )
+            : null,
       ),
     );
   }
