@@ -73,7 +73,7 @@ class _SignInPageState extends State<SignInPage> {
                         },
                         width: MediaQuery.of(context).size.width / 2,
                         color: MyColor.blueishIdk!),
-                    const SizedBox(height: 77),
+                    const SizedBox(height: 40),
                     SizedBox(
                       height: 50,
                       width: MediaQuery.of(context).size.width / 2.5,
