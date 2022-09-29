@@ -30,7 +30,7 @@ class _MyHomePageState extends State<MyHomePage> {
   var random = "Random";
   var randIntStr = "12";
 
-  var isSignedIn = FirebaseAuth.instance.currentUser != null;
+  var isSignedInAndVerified = false;
 
   final _formKey = GlobalKey<FormState>();
 
@@ -54,6 +54,8 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   void initState() {
     super.initState();
+    isSignedInAndVerified =
+        FirebaseAuth.instance.currentUser?.emailVerified == true;
     myColors = getColors(random, randIntStr);
   }
 
@@ -86,6 +88,23 @@ class _MyHomePageState extends State<MyHomePage> {
         onCancelTap: null,
         submitText: "Nice!",
         cancelText: "");
+  }
+
+  void showSignIn() {
+    showDialogPlus(
+        context: context,
+        title: Text("Sign In", style: TextStyle(color: MyColor.blueishIdk)),
+        content: Text("You must Sign In before saving / accessing Favorites.",
+            style: TextStyle(color: MyColor.blueishIdk)),
+        onSubmitTap: () {
+          Navigator.pop(context);
+          signInOut();
+        },
+        onCancelTap: () {
+          Navigator.pop(context);
+        },
+        submitText: "Sign In",
+        cancelText: "Cancel");
   }
 
   Padding colorsGrid(List<MyColor> colors) {
@@ -137,8 +156,12 @@ class _MyHomePageState extends State<MyHomePage> {
                         makeToast("Copied $hex to Clipboard");
                       },
                       onLongPress: () {
-                        FireStore.updateFavorites({hex: hex});
-                        makeToast("Saved $hex to Favorites");
+                        if (isSignedInAndVerified) {
+                          FireStore.updateFavorites({hex: hex});
+                          makeToast("Saved $hex to Favorites");
+                        } else {
+                          showSignIn();
+                        }
                       },
                       child: Container(
                         width: 15,
@@ -210,9 +233,11 @@ class _MyHomePageState extends State<MyHomePage> {
 
   List<Widget>? appBarActions() => [
         Container(
-          decoration: BoxDecoration(color: Colors.grey[900]),
+          decoration: BoxDecoration(color: MyColor.blueishIdk),
           child: PopupMenuButton(
               itemBuilder: (context) {
+                isSignedInAndVerified =
+                    FirebaseAuth.instance.currentUser?.emailVerified == true;
                 return [
                   PopupMenuItem<int>(
                     value: 0,
@@ -231,7 +256,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   ),
                   PopupMenuItem<int>(
                     value: 3,
-                    child: isSignedIn
+                    child: isSignedInAndVerified
                         ? Text("Sign Out",
                             style: TextStyle(color: MyColor.blueishIdk))
                         : Text("Sign In",
@@ -250,29 +275,20 @@ class _MyHomePageState extends State<MyHomePage> {
                     });
                     break;
                   case 1 /*Favorites*/ :
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const FavoritesPage()));
+                    if (isSignedInAndVerified) {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const FavoritesPage()));
+                    } else {
+                      showSignIn();
+                    }
                     break;
                   case 2 /*Info*/ :
                     showInfo();
                     break;
                   case 3 /*Sign Out*/ :
-                    if (isSignedIn) {
-                      FireAuth.signOut();
-                      setState(() {
-                        isSignedIn = false;
-                      });
-                    } else {
-                      setState(() {
-                        isSignedIn = true;
-                      });
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => const AuthPage()));
-                    }
+                    signInOut();
                     break;
                 }
               },
@@ -290,6 +306,19 @@ class _MyHomePageState extends State<MyHomePage> {
         Text(errorMsg,
             style: const TextStyle(color: Colors.white, fontSize: 15))
       ];
+
+  void signInOut() {
+    if (isSignedInAndVerified) {
+      FireAuth.signOut();
+      makeToast("Signed Out");
+      setState(() {
+        isSignedInAndVerified = false;
+      });
+    } else {
+      Navigator.push(
+          context, MaterialPageRoute(builder: (context) => const AuthPage()));
+    }
+  }
 
   @override
   Widget build(BuildContext context) {

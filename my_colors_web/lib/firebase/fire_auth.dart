@@ -5,17 +5,17 @@ import 'dart:developer' as dev;
 
 class FireAuth {
   static Future<User?> registerUsingEmailPassword(
-      {required String name,
-      required String email,
-      required String password}) async {
+      {required String email,
+      required String password,
+      required void Function() onResend}) async {
     User? user;
     FirebaseAuth auth = FirebaseAuth.instance;
     try {
       UserCredential userCredential = await auth.createUserWithEmailAndPassword(
           email: email, password: password);
       user = userCredential.user;
-      await user!.updateDisplayName(name);
-      await user.reload();
+      await user!.reload();
+      user.sendEmailVerification();
       user = auth.currentUser;
     } on FirebaseAuthException catch (e) {
       switch (e.code) {
@@ -23,7 +23,7 @@ class FireAuth {
           makeToast('The password provided is too weak.');
           break;
         case 'email-already-in-use':
-          makeToast('An account already exists with this email.');
+          onResend();
           break;
       }
     }

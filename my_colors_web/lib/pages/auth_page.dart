@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:my_colors_web/data/local/my_color.dart';
 import 'package:my_colors_web/pages/sign_up_page.dart';
 
@@ -12,19 +13,27 @@ class AuthPage extends StatefulWidget {
 }
 
 class _AuthPageState extends State<AuthPage> {
-  final controller = PageController();
+  final controller = PageController(initialPage: 1);
+
+  var isSignedIn = FirebaseAuth.instance.currentUser != null;
 
   @override
   Widget build(BuildContext context) {
-    return RawScrollbar(
-      thumbColor: MyColor.blueishIdk,
-      controller: controller,
-      thumbVisibility: true,
-      trackVisibility: true,
-      child: PageView(
+    return WillPopScope(
+      onWillPop: () {
+        Navigator.pop(context, isSignedIn);
+        return Future.value(false);
+      },
+      child: RawScrollbar(
+        thumbColor: MyColor.blueishIdk,
         controller: controller,
-        scrollDirection: Axis.vertical,
-        children: const [SignUpPage(), SignInPage()],
+        thumbVisibility: true,
+        trackVisibility: true,
+        child: PageView(
+          controller: controller,
+          scrollDirection: Axis.vertical,
+          children: const [SignUpPage(), SignInPage()],
+        ),
       ),
     );
   }
