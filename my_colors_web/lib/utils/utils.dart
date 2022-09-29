@@ -31,6 +31,8 @@ SizedBox textField(
           keyboardType: keyboardType,
           cursorColor: color,
           decoration: InputDecoration(
+              counterText: "",
+              counterStyle: TextStyle(color: MyColor.blueishIdk),
               enabledBorder: UnderlineInputBorder(
                   borderSide: BorderSide(
                 color: color,
