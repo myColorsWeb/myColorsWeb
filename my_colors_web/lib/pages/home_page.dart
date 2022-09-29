@@ -108,75 +108,141 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   Padding colorsGrid(List<MyColor> colors) {
-    return Padding(
-        padding: const EdgeInsets.all(15.0),
-        child: GridView.builder(
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              childAspectRatio: 1 / .5,
-              crossAxisCount: 4,
-              crossAxisSpacing: 10,
-              mainAxisSpacing: 10,
-            ),
-            itemCount: colors.length,
-            itemBuilder: (_, index) {
-              String hex = colors[index].hex;
-              return animatedColorsGrid(
-                  colors,
-                  index,
-                  ScaleAnimation(
-                    child: InkWell(
-                      onTap: () => showDialogPlus(
-                          context: context,
-                          title: Text("Selected Color",
-                              style: TextStyle(
-                                  color: MyColor.getColorFromHex(hex))),
-                          content: Container(
-                            width: MediaQuery.of(context).size.width / 5,
-                            height: MediaQuery.of(context).size.width / 5,
-                            decoration: BoxDecoration(
-                                color: MyColor.getColorFromHex(hex)),
-                            child: Center(
-                                child: Text(
-                              hex,
-                              style: const TextStyle(color: Colors.white),
-                            )),
-                          ),
-                          onSubmitTap: () {
-                            Navigator.pop(context);
-                          },
-                          onCancelTap: () {
-                            Clipboard.setData(ClipboardData(text: hex));
-                            Navigator.pop(context);
-                            makeToast("Copied $hex to Clipboard");
-                          },
-                          submitText: "Nice!",
-                          cancelText: "Copy to Clipboard"),
-                      onDoubleTap: () {
-                        Clipboard.setData(ClipboardData(text: hex));
-                        makeToast("Copied $hex to Clipboard");
-                      },
-                      onLongPress: () {
-                        if (isSignedInAndVerified) {
-                          FireStore.updateFavorites({hex: hex});
-                          makeToast("Saved $hex to Favorites");
-                        } else {
-                          showSignIn();
-                        }
-                      },
-                      child: Container(
-                        width: 15,
-                        height: 15,
-                        decoration:
-                            BoxDecoration(color: MyColor.getColorFromHex(hex)),
-                        child: Center(
-                            child: Text(
-                          hex,
-                          style: const TextStyle(color: Colors.white),
-                        )),
-                      ),
+    return Padding(padding: const EdgeInsets.all(15.0), child: grid(colors));
+  }
+
+  Widget grid(List<MyColor> colors) {
+    if (MediaQuery.of(context).size.width >= 500) {
+      return GridView.builder(
+          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+            childAspectRatio: 1 / .5,
+            crossAxisCount: 4,
+            crossAxisSpacing: 10,
+            mainAxisSpacing: 10,
+          ),
+          itemCount: colors.length,
+          itemBuilder: (_, index) {
+            String hex = colors[index].hex;
+            return animatedColorsGrid(
+                colors,
+                index,
+                ScaleAnimation(
+                  child: InkWell(
+                    onTap: () => showDialogPlus(
+                        context: context,
+                        title: Text("Selected Color",
+                            style:
+                                TextStyle(color: MyColor.getColorFromHex(hex))),
+                        content: Container(
+                          width: MediaQuery.of(context).size.width / 5,
+                          height: MediaQuery.of(context).size.width / 5,
+                          decoration: BoxDecoration(
+                              color: MyColor.getColorFromHex(hex)),
+                          child: Center(
+                              child: Text(
+                            hex,
+                            style: const TextStyle(color: Colors.white),
+                          )),
+                        ),
+                        onSubmitTap: () {
+                          Navigator.pop(context);
+                        },
+                        onCancelTap: () {
+                          Clipboard.setData(ClipboardData(text: hex));
+                          Navigator.pop(context);
+                          makeToast("Copied $hex to Clipboard");
+                        },
+                        submitText: "Nice!",
+                        cancelText: "Copy to Clipboard"),
+                    onDoubleTap: () {
+                      Clipboard.setData(ClipboardData(text: hex));
+                      makeToast("Copied $hex to Clipboard");
+                    },
+                    onLongPress: () {
+                      if (isSignedInAndVerified) {
+                        FireStore.updateFavorites({hex: hex});
+                        makeToast("Saved $hex to Favorites");
+                      } else {
+                        showSignIn();
+                      }
+                    },
+                    child: Container(
+                      width: 15,
+                      height: 15,
+                      decoration:
+                          BoxDecoration(color: MyColor.getColorFromHex(hex)),
+                      child: Center(
+                          child: Text(
+                        hex,
+                        style: const TextStyle(color: Colors.white),
+                      )),
                     ),
-                  ));
-            }));
+                  ),
+                ));
+          });
+    } else {
+      return ListView.builder(
+          itemCount: colors.length,
+          itemBuilder: (_, index) {
+            String hex = colors[index].hex;
+            return animatedColorsGrid(
+                colors,
+                index,
+                ScaleAnimation(
+                  child: InkWell(
+                    onTap: () => showDialogPlus(
+                        context: context,
+                        title: Text("Selected Color",
+                            style:
+                                TextStyle(color: MyColor.getColorFromHex(hex))),
+                        content: Container(
+                          width: MediaQuery.of(context).size.width / 5,
+                          height: MediaQuery.of(context).size.width / 5,
+                          decoration: BoxDecoration(
+                              color: MyColor.getColorFromHex(hex)),
+                          child: Center(
+                              child: Text(
+                            hex,
+                            style: const TextStyle(color: Colors.white),
+                          )),
+                        ),
+                        onSubmitTap: () {
+                          Navigator.pop(context);
+                        },
+                        onCancelTap: () {
+                          Clipboard.setData(ClipboardData(text: hex));
+                          Navigator.pop(context);
+                          makeToast("Copied $hex to Clipboard");
+                        },
+                        submitText: "Nice!",
+                        cancelText: "Copy to Clipboard"),
+                    onDoubleTap: () {
+                      Clipboard.setData(ClipboardData(text: hex));
+                      makeToast("Copied $hex to Clipboard");
+                    },
+                    onLongPress: () {
+                      if (isSignedInAndVerified) {
+                        FireStore.updateFavorites({hex: hex});
+                        makeToast("Saved $hex to Favorites");
+                      } else {
+                        showSignIn();
+                      }
+                    },
+                    child: Container(
+                      width: 15,
+                      height: 15,
+                      decoration:
+                          BoxDecoration(color: MyColor.getColorFromHex(hex)),
+                      child: Center(
+                          child: Text(
+                        hex,
+                        style: const TextStyle(color: Colors.white),
+                      )),
+                    ),
+                  ),
+                ));
+          });
+    }
   }
 
   List<Widget> appBarChildren() => [
