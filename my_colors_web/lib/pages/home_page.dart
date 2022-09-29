@@ -203,8 +203,11 @@ class _MyHomePageState extends State<MyHomePage> {
         padding: const EdgeInsets.only(top: 15),
         child: ElevatedButton(
             style: ButtonStyle(
-                backgroundColor: MaterialStateProperty.all<Color>(Colors.white)),
-            onPressed: () {},
+                backgroundColor:
+                    MaterialStateProperty.all<Color>(Colors.white)),
+            onPressed: () {
+              search();
+            },
             child: Text(
               "Search",
               style: TextStyle(color: MyColor.blueishIdk),
