@@ -120,6 +120,8 @@ class _MyHomePageState extends State<MyHomePage> {
     return Padding(
         padding: const EdgeInsets.all(15.0),
         child: RefreshIndicator(
+          color: MyColor.blueishIdk,
+          backgroundColor: Colors.grey[900],
           onRefresh: () {
             searchRandom();
             return Future.value(null);
