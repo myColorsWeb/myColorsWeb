@@ -191,6 +191,7 @@ class _MyHomePageState extends State<MyHomePage> {
             color: Colors.white,
             hintText: "Color",
             controller: _colorController,
+            maxLen: 7,
             validator: (s) {
               if (s == null || s.isEmpty) {
                 return "";
@@ -213,6 +214,8 @@ class _MyHomePageState extends State<MyHomePage> {
             color: Colors.white,
             hintText: "#",
             controller: _countController,
+            keyboardType: TextInputType.number,
+            maxLen: 2,
             validator: (s) {
               if (s == null || s.isEmpty) {
                 makeToast("Please provide a count");

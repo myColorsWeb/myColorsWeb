@@ -87,6 +87,7 @@ class _SignInPageState extends State<SignUpPage> {
                         context: context,
                         hintText: "Password",
                         controller: _passwordController,
+                        maxLen: 20,
                         onFieldSubmitted: (s) {},
                         validator: (s) {
                           if (s == null || s.isEmpty) {
@@ -101,6 +102,7 @@ class _SignInPageState extends State<SignUpPage> {
                         context: context,
                         hintText: "Confirm Password",
                         controller: _cPasswordController,
+                        maxLen: 20,
                         onFieldSubmitted: (s) {},
                         validator: (s) {
                           if (s == null || s.isEmpty) {

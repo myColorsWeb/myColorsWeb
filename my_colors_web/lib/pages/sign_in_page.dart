@@ -65,6 +65,7 @@ class _SignInPageState extends State<SignInPage> {
                         context: context,
                         hintText: "Password",
                         controller: _passwordController,
+                        maxLen: 20,
                         onFieldSubmitted: (s) {},
                         validator: (s) {
                           if (s == null || s.isEmpty) {

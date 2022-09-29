@@ -11,8 +11,10 @@ SizedBox textField(
     required TextEditingController controller,
     required void Function(String)? onFieldSubmitted,
     required String? Function(String?)? validator,
+    TextInputType? keyboardType = TextInputType.text,
     required double width,
-    required Color color}) {
+    required Color color,
+    int maxLen = 40}) {
   return SizedBox(
     width: width,
     child: Theme(
@@ -20,11 +22,13 @@ SizedBox textField(
           textSelectionTheme:
               const TextSelectionThemeData(selectionColor: Colors.grey)),
       child: TextFormField(
+          maxLength: maxLen,
           onFieldSubmitted: onFieldSubmitted,
           controller: controller,
           textInputAction: TextInputAction.done,
           validator: validator,
           style: TextStyle(color: color),
+          keyboardType: keyboardType,
           cursorColor: color,
           decoration: InputDecoration(
               enabledBorder: UnderlineInputBorder(
