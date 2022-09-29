@@ -1,3 +1,4 @@
+import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
@@ -7,7 +8,6 @@ SizedBox textField(
     {required BuildContext context,
     required String hintText,
     required TextEditingController controller,
-    required TextInputAction? textInputAction,
     required void Function(String)? onFieldSubmitted,
     required String? Function(String?)? validator,
     required double width}) {
@@ -20,7 +20,7 @@ SizedBox textField(
       child: TextFormField(
           onFieldSubmitted: onFieldSubmitted,
           controller: controller,
-          textInputAction: textInputAction,
+          textInputAction: TextInputAction.done,
           validator: validator,
           style: const TextStyle(color: Colors.white),
           cursorColor: Colors.white,
@@ -107,8 +107,24 @@ Padding colorsGrid(
               );
             }));
 
-extension Range on int {
-  bool isBetween(int from, int to) {
-    return from < this && this < to;
+SizedBox animatedText(BuildContext context, String text) {
+    List<Color> colorizeColors = [
+      Colors.white,
+      Colors.white,
+      Colors.green,
+      Colors.pink,
+      Colors.blue,
+    ];
+    const colorizeTextStyle = TextStyle(fontSize: 20);
+    return SizedBox(
+      child: AnimatedTextKit(
+        animatedTexts: [
+          ColorizeAnimatedText(text,
+              textStyle: colorizeTextStyle,
+              colors: colorizeColors,
+              textAlign: TextAlign.center),
+        ],
+        isRepeatingAnimation: false,
+      ),
+    );
   }
-}

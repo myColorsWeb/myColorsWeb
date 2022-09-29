@@ -39,6 +39,8 @@ dependencies:
   firebase_messaging: ^11.2.5
   firebase_analytics: ^9.0.5
   animated_text_kit: ^4.2.2
+  dependencies:
+  flutter_staggered_animations: ^1.0.0
 
 dev_dependencies:
   flutter_test:
