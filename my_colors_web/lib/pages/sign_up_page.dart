@@ -66,7 +66,7 @@ class _SignInPageState extends State<SignUpPage> {
                         style:
                             TextStyle(color: MyColor.blueishIdk, fontSize: 30)),
                     const SizedBox(height: 15),
-                    Text("Access your Favs via\nmyColors for Android",
+                    Text("Access your Favs via\nweb or Android",
                         style:
                             TextStyle(color: MyColor.blueishIdk, fontSize: 14)),
                     const SizedBox(height: 40),
