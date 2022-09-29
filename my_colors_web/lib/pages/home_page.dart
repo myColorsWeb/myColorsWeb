@@ -84,7 +84,7 @@ class _MyHomePageState extends State<MyHomePage> {
             style: TextStyle(color: MyColor.blueishIdk)),
         onSubmitTap: () => Navigator.pop(context),
         onCancelTap: null,
-        submitText: "OK",
+        submitText: "Nice!",
         cancelText: "");
   }
 
@@ -207,61 +207,75 @@ class _MyHomePageState extends State<MyHomePage> {
       ];
 
   List<Widget>? appBarActions() => [
-        PopupMenuButton(itemBuilder: (context) {
-          return [
-            const PopupMenuItem<int>(
-              value: 0,
-              child: Text("Random"),
-            ),
-            const PopupMenuItem<int>(
-              value: 1,
-              child: Text("Favorites"),
-            ),
-            const PopupMenuItem<int>(
-              value: 2,
-              child: Text("Info"),
-            ),
-            PopupMenuItem<int>(
-              value: 3,
-              child:
-                  isSignedIn ? const Text("Sign Out") : const Text("Sign In"),
-            ),
-          ];
-        }, onSelected: (value) {
-          switch (value) {
-            case 0 /*Random*/ :
-              setState(() {
-                randIntStr = (Random().nextInt(12) + 2).toString();
-                _colorController.text = random;
-                _countController.text = randIntStr;
-                myColors = getColors(random, randIntStr);
-              });
-              break;
-            case 1 /*Favorites*/ :
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => const FavoritesPage()));
-              break;
-            case 2 /*Info*/ :
-              showInfo();
-              break;
-            case 3 /*Sign Out*/ :
-              if (isSignedIn) {
-                FireAuth.signOut();
-                setState(() {
-                  isSignedIn = false;
-                });
-              } else {
-                setState(() {
-                  isSignedIn = true;
-                });
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => const AuthPage()));
-              }
-              break;
-          }
-        }),
+        Container(
+          decoration: BoxDecoration(color: Colors.grey[900]),
+          child: PopupMenuButton(
+              itemBuilder: (context) {
+                return [
+                  PopupMenuItem<int>(
+                    value: 0,
+                    child: Text("Random",
+                        style: TextStyle(color: MyColor.blueishIdk)),
+                  ),
+                  PopupMenuItem<int>(
+                    value: 1,
+                    child: Text("Favorites",
+                        style: TextStyle(color: MyColor.blueishIdk)),
+                  ),
+                  PopupMenuItem<int>(
+                    value: 2,
+                    child: Text("Info",
+                        style: TextStyle(color: MyColor.blueishIdk)),
+                  ),
+                  PopupMenuItem<int>(
+                    value: 3,
+                    child: isSignedIn
+                        ? Text("Sign Out",
+                            style: TextStyle(color: MyColor.blueishIdk))
+                        : Text("Sign In",
+                            style: TextStyle(color: MyColor.blueishIdk)),
+                  ),
+                ];
+              },
+              onSelected: (value) {
+                switch (value) {
+                  case 0 /*Random*/ :
+                    setState(() {
+                      randIntStr = (Random().nextInt(12) + 2).toString();
+                      _colorController.text = random;
+                      _countController.text = randIntStr;
+                      myColors = getColors(random, randIntStr);
+                    });
+                    break;
+                  case 1 /*Favorites*/ :
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const FavoritesPage()));
+                    break;
+                  case 2 /*Info*/ :
+                    showInfo();
+                    break;
+                  case 3 /*Sign Out*/ :
+                    if (isSignedIn) {
+                      FireAuth.signOut();
+                      setState(() {
+                        isSignedIn = false;
+                      });
+                    } else {
+                      setState(() {
+                        isSignedIn = true;
+                      });
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const AuthPage()));
+                    }
+                    break;
+                }
+              },
+              color: Colors.grey[900]),
+        ),
       ];
 
   List<Widget> errorIconAndMsg(String errorMsg) => [
