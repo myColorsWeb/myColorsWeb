@@ -34,20 +34,23 @@ class _MyHomePageState extends State<MyHomePage> {
 
   final _formKey = GlobalKey<FormState>();
 
-  final additionalInfo = [
-    "RED",
-    "PINK",
-    "PURPLE",
-    "NAVY",
-    "BLUE",
-    "AQUA",
-    "GREEN",
-    "LIME",
-    "YELLOW",
-    "ORANGE",
-    "RANDOM",
-    "\n* Double-Click to Copy\n* Long-Press to Save"
-  ];
+  List<String> additionalInfo() => [
+        "RED",
+        "PINK",
+        "PURPLE",
+        "NAVY",
+        "BLUE",
+        "AQUA",
+        "GREEN",
+        "LIME",
+        "YELLOW",
+        "ORANGE",
+        "RANDOM",
+        "\n* Double-Click to Copy\n* Long-Press to Save",
+        isSignedInAndVerified
+            ? "\nSigned In as ${FirebaseAuth.instance.currentUser!.email}"
+            : ""
+      ];
 
   Future<List<MyColor>> myColors = Future<List<MyColor>>.value([]);
 
@@ -87,7 +90,7 @@ class _MyHomePageState extends State<MyHomePage> {
         context: context,
         title: Text("Colors to Search",
             style: TextStyle(color: MyColor.blueishIdk)),
-        content: Text(additionalInfo.join("\n"),
+        content: Text(additionalInfo().join("\n"),
             style: TextStyle(color: MyColor.blueishIdk)),
         onSubmitTap: () => Navigator.pop(context),
         onCancelTap: null,
@@ -231,12 +234,9 @@ class _MyHomePageState extends State<MyHomePage> {
             validator: (s) {
               if (s == null || s.isEmpty) {
                 return "";
-              } else if (!additionalInfo.contains(s.toUpperCase())) {
+              } else if (!additionalInfo()
+                  .contains(s.toUpperCase())) {
                 makeToast("Please enter a valid color");
-                if (isSignedInAndVerified) {
-                  additionalInfo.add(
-                      "\nSigned In as ${FirebaseAuth.instance.currentUser!.email}");
-                }
                 showInfo();
                 return "";
               }
