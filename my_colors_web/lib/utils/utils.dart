@@ -58,7 +58,7 @@ void showDialogPlus({
           TextButton(
             onPressed: () => onCancelTap(),
             child:
-                Text(cancelText, style: const TextStyle(color: Colors.black)),
+                Text(cancelText, style: TextStyle(color: MyColor.blueishIdk)),
           ),
         if (onSubmitTap != null)
           TextButton(
@@ -75,7 +75,8 @@ void makeToast(String msg) {
   Fluttertoast.showToast(msg: msg, toastLength: Toast.LENGTH_LONG);
 }
 
-SizedBox animatedText(BuildContext context, String text) {
+SizedBox animatedText(BuildContext context, String text,
+    {void Function()? onTap}) {
   List<Color> colorizeColors = [
     Colors.white,
     Colors.white,
@@ -86,6 +87,7 @@ SizedBox animatedText(BuildContext context, String text) {
   const colorizeTextStyle = TextStyle(fontSize: 20);
   return SizedBox(
     child: AnimatedTextKit(
+      onTap: () => onTap,
       animatedTexts: [
         ColorizeAnimatedText(text,
             textStyle: colorizeTextStyle,

@@ -64,10 +64,14 @@ class _MyHomePageState extends State<MyHomePage> {
     _countController.dispose();
   }
 
-  void search() {
+  void search({bool searchRandom = false}) {
+    randIntStr = (Random().nextInt(12) + 2).toString();
     setState(() {
-      myColors =
-          getColors(_colorController.text.toLowerCase(), _countController.text);
+      if (searchRandom) {
+        myColors = getColors(random, randIntStr);
+      } else {
+        myColors = getColors(_colorController.text.toLowerCase(), randIntStr);
+      }
     });
   }
 
@@ -102,6 +106,32 @@ class _MyHomePageState extends State<MyHomePage> {
                   index,
                   ScaleAnimation(
                     child: InkWell(
+                      onTap: () => showDialogPlus(
+                          context: context,
+                          title: Text("Selected Color",
+                              style: TextStyle(
+                                  color: MyColor.getColorFromHex(hex))),
+                          content: Container(
+                            width: MediaQuery.of(context).size.width / 5,
+                            height: MediaQuery.of(context).size.width / 5,
+                            decoration: BoxDecoration(
+                                color: MyColor.getColorFromHex(hex)),
+                            child: Center(
+                                child: Text(
+                              hex,
+                              style: const TextStyle(color: Colors.white),
+                            )),
+                          ),
+                          onSubmitTap: () {
+                            Navigator.pop(context);
+                          },
+                          onCancelTap: () {
+                            Clipboard.setData(ClipboardData(text: hex));
+                            Navigator.pop(context);
+                            makeToast("Copied $hex to Clipboard");
+                          },
+                          submitText: "Nice!",
+                          cancelText: "Copy to Clipboard"),
                       onDoubleTap: () {
                         Clipboard.setData(ClipboardData(text: hex));
                         makeToast("Copied $hex to Clipboard");
@@ -255,7 +285,7 @@ class _MyHomePageState extends State<MyHomePage> {
           title: Row(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              animatedText(context, "myColorsWeb"),
+              animatedText(context, "myColorsWeb", onTap: () {}),
               const SizedBox(width: 20),
               Form(
                 key: _formKey,
