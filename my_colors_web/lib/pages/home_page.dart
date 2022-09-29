@@ -96,38 +96,34 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
             itemCount: colors.length,
             itemBuilder: (_, index) {
-              return animatedColorsGrid(colors, index);
+              String hex = colors[index].hex;
+              return animatedColorsGrid(
+                  colors,
+                  index,
+                  ScaleAnimation(
+                    child: InkWell(
+                      onDoubleTap: () {
+                        Clipboard.setData(ClipboardData(text: hex));
+                        makeToast("Copied $hex to Clipboard");
+                      },
+                      onLongPress: () {
+                        FireStore.updateFavorites({hex: hex});
+                        makeToast("Saved $hex to Favorites");
+                      },
+                      child: Container(
+                        width: 15,
+                        height: 15,
+                        decoration:
+                            BoxDecoration(color: MyColor.getColorFromHex(hex)),
+                        child: Center(
+                            child: Text(
+                          hex,
+                          style: const TextStyle(color: Colors.white),
+                        )),
+                      ),
+                    ),
+                  ));
             }));
-  }
-
-  Widget animatedColorsGrid(List<MyColor> colors, int index) {
-    String hex = colors[index].hex;
-    return AnimationConfiguration.staggeredList(
-      position: index,
-      duration: const Duration(milliseconds: 777),
-      child: ScaleAnimation(
-        child: InkWell(
-          onDoubleTap: () {
-            Clipboard.setData(ClipboardData(text: hex));
-            makeToast("Copied $hex to Clipboard");
-          },
-          onLongPress: () {
-            FireStore.updateFavorites({hex: hex});
-            makeToast("Saved $hex to Favorites");
-          },
-          child: Container(
-            width: 15,
-            height: 15,
-            decoration: BoxDecoration(color: MyColor.getColorFromHex(hex)),
-            child: Center(
-                child: Text(
-              hex,
-              style: const TextStyle(color: Colors.white),
-            )),
-          ),
-        ),
-      ),
-    );
   }
 
   List<Widget> appBarChildren() => [
@@ -212,8 +208,10 @@ class _MyHomePageState extends State<MyHomePage> {
               });
               break;
             case 1 /*Favorites*/ :
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => const Favorites()));
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => const FavoritesPage()));
               break;
             case 2 /*Info*/ :
               showInfo();

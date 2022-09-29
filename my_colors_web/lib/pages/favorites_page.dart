@@ -5,15 +5,15 @@ import '../firebase/firestore.dart';
 import '../data/local/my_color.dart';
 import '../utils/utils.dart';
 
-class Favorites extends StatefulWidget {
-  const Favorites({super.key});
+class FavoritesPage extends StatefulWidget {
+  const FavoritesPage({super.key});
 
   @override
-  State<Favorites> createState() => _FavoritesState();
+  State<FavoritesPage> createState() => _FavoritesState();
 }
 
-class _FavoritesState extends State<Favorites> {
-  final List<MyColor?> _favColors = [];
+class _FavoritesState extends State<FavoritesPage> {
+  final List<MyColor> _favColors = [];
 
   @override
   void initState() {
@@ -27,7 +27,7 @@ class _FavoritesState extends State<Favorites> {
     });
   }
 
-  Padding favoritesGrid(List<MyColor?> colors) {
+  Padding favoritesGrid(List<MyColor> colors) {
     return Padding(
         padding: const EdgeInsets.all(15.0),
         child: GridView.builder(
@@ -39,31 +39,34 @@ class _FavoritesState extends State<Favorites> {
             ),
             itemCount: colors.length,
             itemBuilder: (_, index) {
-              String hex = colors[index]!.hex;
-              return InkWell(
-                onDoubleTap: () {
-                  Clipboard.setData(ClipboardData(text: hex));
-                  makeToast("Copied $hex to Clipboard");
-                },
-                onLongPress: () {
-                  setState(() {
-                    _favColors.remove(colors[index]);
-                  });
-                  FireStore.deleteFavColor(hex);
-                  makeToast("Deleted $hex from Favorites");
-                },
-                child: Container(
-                  width: 15,
-                  height: 15,
-                  decoration:
-                      BoxDecoration(color: MyColor.getColorFromHex(hex)),
-                  child: Center(
-                      child: Text(
-                    hex,
-                    style: const TextStyle(color: Colors.white),
-                  )),
-                ),
-              );
+              String hex = colors[index].hex;
+              return animatedColorsGrid(
+                  colors,
+                  index,
+                  InkWell(
+                    onDoubleTap: () {
+                      Clipboard.setData(ClipboardData(text: hex));
+                      makeToast("Copied $hex to Clipboard");
+                    },
+                    onLongPress: () {
+                      setState(() {
+                        _favColors.remove(colors[index]);
+                      });
+                      FireStore.deleteFavColor(hex);
+                      makeToast("Deleted $hex from FavoritesPage");
+                    },
+                    child: Container(
+                      width: 15,
+                      height: 15,
+                      decoration:
+                          BoxDecoration(color: MyColor.getColorFromHex(hex)),
+                      child: Center(
+                          child: Text(
+                        hex,
+                        style: const TextStyle(color: Colors.white),
+                      )),
+                    ),
+                  ));
             }));
   }
 

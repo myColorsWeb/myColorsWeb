@@ -1,5 +1,6 @@
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 import '../data/local/my_color.dart';
@@ -74,57 +75,32 @@ void makeToast(String msg) {
   Fluttertoast.showToast(msg: msg, toastLength: Toast.LENGTH_LONG);
 }
 
-Padding colorsGrid(
-        {required List<MyColor?> colors,
-        required void Function()? onDoubleTap,
-        required void Function()? onLongPress}) =>
-    Padding(
-        padding: const EdgeInsets.all(15.0),
-        child: GridView.builder(
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              childAspectRatio: 1 / .5,
-              crossAxisCount: 4,
-              crossAxisSpacing: 10,
-              mainAxisSpacing: 10,
-            ),
-            itemCount: colors.length,
-            itemBuilder: (_, index) {
-              String hex = colors[index]!.hex;
-              return InkWell(
-                onDoubleTap: onDoubleTap,
-                onLongPress: onLongPress,
-                child: Container(
-                  width: 15,
-                  height: 15,
-                  decoration:
-                      BoxDecoration(color: MyColor.getColorFromHex(hex)),
-                  child: Center(
-                      child: Text(
-                    hex,
-                    style: const TextStyle(color: Colors.white),
-                  )),
-                ),
-              );
-            }));
-
 SizedBox animatedText(BuildContext context, String text) {
-    List<Color> colorizeColors = [
-      Colors.white,
-      Colors.white,
-      Colors.green,
-      Colors.pink,
-      Colors.blue,
-    ];
-    const colorizeTextStyle = TextStyle(fontSize: 20);
-    return SizedBox(
-      child: AnimatedTextKit(
-        animatedTexts: [
-          ColorizeAnimatedText(text,
-              textStyle: colorizeTextStyle,
-              colors: colorizeColors,
-              textAlign: TextAlign.center),
-        ],
-        isRepeatingAnimation: false,
-      ),
-    );
-  }
+  List<Color> colorizeColors = [
+    Colors.white,
+    Colors.white,
+    Colors.green,
+    Colors.pink,
+    Colors.blue,
+  ];
+  const colorizeTextStyle = TextStyle(fontSize: 20);
+  return SizedBox(
+    child: AnimatedTextKit(
+      animatedTexts: [
+        ColorizeAnimatedText(text,
+            textStyle: colorizeTextStyle,
+            colors: colorizeColors,
+            textAlign: TextAlign.center),
+      ],
+      isRepeatingAnimation: false,
+    ),
+  );
+}
+
+Widget animatedColorsGrid(List<MyColor> colors, int index, Widget child) {
+  return AnimationConfiguration.staggeredList(
+    position: index,
+    duration: const Duration(milliseconds: 777),
+    child: child,
+  );
+}
