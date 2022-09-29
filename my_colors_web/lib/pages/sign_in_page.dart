@@ -31,80 +31,73 @@ class _SignInPageState extends State<SignInPage> {
       child: Scaffold(
         backgroundColor: Colors.grey[900],
         body: Center(
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Center(
-                child: Form(
-                  key: _formKey,
-                  child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text("Sign In",
-                            style: TextStyle(
-                                color: MyColor.blueishIdk, fontSize: 30)),
-                        const SizedBox(height: 15),
-                        Text("Access your Favs via\nmyColors for Android",
-                            style: TextStyle(
-                                color: MyColor.blueishIdk, fontSize: 14)),
-                        const SizedBox(height: 77),
-                        textField(
-                            context: context,
-                            hintText: "Email",
-                            controller: _emailController,
-                            onFieldSubmitted: (s) {},
-                            validator: (s) {
-                              if (s == null || s.isEmpty) {
-                                return "Please provide a value";
+          child: Center(
+            child: Form(
+              key: _formKey,
+              child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Lottie.asset('arrow_up_lottie.json'),
+                    Text("Sign In",
+                        style:
+                            TextStyle(color: MyColor.blueishIdk, fontSize: 30)),
+                    const SizedBox(height: 15),
+                    Text("Access your Favs via\nmyColors for Android",
+                        style:
+                            TextStyle(color: MyColor.blueishIdk, fontSize: 14)),
+                    const SizedBox(height: 40),
+                    textField(
+                        context: context,
+                        hintText: "Email",
+                        controller: _emailController,
+                        onFieldSubmitted: (s) {},
+                        validator: (s) {
+                          if (s == null || s.isEmpty) {
+                            return "Please provide a value";
+                          }
+                          return null;
+                        },
+                        width: MediaQuery.of(context).size.width / 2,
+                        color: MyColor.blueishIdk!),
+                    const SizedBox(height: 20),
+                    textField(
+                        context: context,
+                        hintText: "Password",
+                        controller: _passwordController,
+                        onFieldSubmitted: (s) {},
+                        validator: (s) {
+                          if (s == null || s.isEmpty) {
+                            return "Please provide a value";
+                          }
+                          return null;
+                        },
+                        width: MediaQuery.of(context).size.width / 2,
+                        color: MyColor.blueishIdk!),
+                    const SizedBox(height: 77),
+                    SizedBox(
+                      height: 50,
+                      width: MediaQuery.of(context).size.width / 2.5,
+                      child: ElevatedButton(
+                          onPressed: () async {
+                            if (_formKey.currentState!.validate()) {
+                              var user =
+                                  await FireAuth.signInUsingEmailPassword(
+                                      email: _emailController.text,
+                                      password: _passwordController.text);
+                              if (user != null && mounted) {
+                                Navigator.pushAndRemoveUntil(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => const MyHomePage(
+                                            title: "myColorsWeb")),
+                                    (Route<dynamic> route) => false);
                               }
-                              return null;
-                            },
-                            width: MediaQuery.of(context).size.width / 2,
-                            color: MyColor.blueishIdk!),
-                        const SizedBox(height: 20),
-                        textField(
-                            context: context,
-                            hintText: "Password",
-                            controller: _passwordController,
-                            onFieldSubmitted: (s) {},
-                            validator: (s) {
-                              if (s == null || s.isEmpty) {
-                                return "Please provide a value";
-                              }
-                              return null;
-                            },
-                            width: MediaQuery.of(context).size.width / 2,
-                            color: MyColor.blueishIdk!),
-                        const SizedBox(height: 77),
-                        SizedBox(
-                          height: 50,
-                          width: MediaQuery.of(context).size.width / 2.5,
-                          child: ElevatedButton(
-                              onPressed: () async {
-                                if (_formKey.currentState!.validate()) {
-                                  var user =
-                                      await FireAuth.signInUsingEmailPassword(
-                                          email: _emailController.text,
-                                          password: _passwordController.text);
-                                  if (user != null && mounted) {
-                                    Navigator.pushAndRemoveUntil(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) =>
-                                                const MyHomePage(
-                                                    title: "myColorsWeb")),
-                                        (Route<dynamic> route) => false);
-                                  }
-                                }
-                              },
-                              child: const Text("Sign In")),
-                        )
-                      ]),
-                ),
-              ),
-              SizedBox(width: MediaQuery.of(context).size.width / 15),
-              Lottie.asset('arrow_up_lottie.json')
-            ],
+                            }
+                          },
+                          child: const Text("Sign In")),
+                    )
+                  ]),
+            ),
           ),
         ),
       ),
