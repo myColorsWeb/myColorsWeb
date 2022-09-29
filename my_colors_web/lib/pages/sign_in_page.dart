@@ -1,3 +1,4 @@
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import 'package:my_colors_web/data/local/my_color.dart';
@@ -16,7 +17,7 @@ class _SignInPageState extends State<SignInPage> {
   final _formKey = GlobalKey<FormState>();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
-
+  
   @override
   void dispose() {
     super.dispose();
@@ -86,13 +87,17 @@ class _SignInPageState extends State<SignInPage> {
                                   await FireAuth.signInUsingEmailPassword(
                                       email: _emailController.text,
                                       password: _passwordController.text);
-                              if (user != null && mounted) {
-                                Navigator.pushAndRemoveUntil(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => const MyHomePage(
-                                            title: "myColorsWeb")),
-                                    (Route<dynamic> route) => false);
+                              if (user != null) {
+                                await FirebaseAnalytics.instance.logLogin();
+                                if (mounted) {
+                                  Navigator.pushAndRemoveUntil(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              const MyHomePage(
+                                                  title: "myColorsWeb")),
+                                      (Route<dynamic> route) => false);
+                                }
                               }
                             }
                           },

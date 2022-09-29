@@ -1,3 +1,4 @@
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:my_colors_web/data/local/my_color.dart';
@@ -128,8 +129,10 @@ class _SignInPageState extends State<SignUpPage> {
                                         Navigator.pop(context);
                                         showEmailVerificationDialog();
                                       }));
-                              if (user != null && mounted) {
-                                if (user.emailVerified) {
+                              if (user != null && user.emailVerified) {
+                                await FirebaseAnalytics.instance
+                                    .logSignUp(signUpMethod: "email");
+                                if (mounted) {
                                   Navigator.pushAndRemoveUntil(
                                       context,
                                       MaterialPageRoute(

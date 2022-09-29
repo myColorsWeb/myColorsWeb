@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:my_colors_web/data/local/my_color.dart';
 
 import 'firebase/firebase_options.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'pages/home_page.dart';
 
 void main() async {
@@ -12,8 +13,20 @@ void main() async {
   runApp(const MyApp());
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({Key? key}) : super(key: key);
+
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+
+  @override
+  void initState() async {
+    super.initState();
+    await FirebaseAnalytics.instance.logAppOpen();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -21,9 +34,8 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'myColorsWeb',
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSwatch().copyWith(
-            primary: MyColor.blueishIdk,
-            secondary: Colors.grey[900]),
+        colorScheme: ColorScheme.fromSwatch()
+            .copyWith(primary: MyColor.blueishIdk, secondary: Colors.grey[900]),
       ),
       home: const MyHomePage(title: 'myColorsWeb'),
     );

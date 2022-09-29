@@ -1,3 +1,4 @@
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:my_colors_web/pages/auth_page.dart';
@@ -69,20 +70,23 @@ class _MyHomePageState extends State<MyHomePage> {
     _countController.dispose();
   }
 
-  void search() {
+  void search() async {
+    var color = _colorController.text.toLowerCase();
     setState(() {
       myColors =
-          getColors(_colorController.text.toLowerCase(), _countController.text);
+          getColors(color, _countController.text);
     });
+    await FirebaseAnalytics.instance.logSearch(searchTerm: color);
   }
 
-  void searchRandom() {
+  void searchRandom() async {
     setState(() {
       randIntStr = (Random().nextInt(12) + 2).toString();
       _colorController.text = random;
       _countController.text = randIntStr;
       myColors = getColors(random, randIntStr);
     });
+    await FirebaseAnalytics.instance.logSearch(searchTerm: random);
   }
 
   void showInfo() {
@@ -234,8 +238,7 @@ class _MyHomePageState extends State<MyHomePage> {
             validator: (s) {
               if (s == null || s.isEmpty) {
                 return "";
-              } else if (!additionalInfo()
-                  .contains(s.toUpperCase())) {
+              } else if (!additionalInfo().contains(s.toUpperCase())) {
                 makeToast("Please enter a valid color");
                 showInfo();
                 return "";
