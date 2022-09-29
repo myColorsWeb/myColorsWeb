@@ -37,7 +37,7 @@ class _SignInPageState extends State<SignInPage> {
               child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    if (MediaQuery.of(context).size.width >= 500)
+                    if (isScreenSize500Above(context))
                       Lottie.asset('arrow_up_lottie.json'),
                     Text("Sign In",
                         style:
@@ -58,7 +58,7 @@ class _SignInPageState extends State<SignInPage> {
                           }
                           return null;
                         },
-                        width: MediaQuery.of(context).size.width / 2,
+                        width: authTextFieldWidth(context),
                         color: MyColor.blueishIdk!),
                     const SizedBox(height: 20),
                     textField(
@@ -73,7 +73,7 @@ class _SignInPageState extends State<SignInPage> {
                           }
                           return null;
                         },
-                        width: MediaQuery.of(context).size.width / 2,
+                        width: authTextFieldWidth(context),
                         color: MyColor.blueishIdk!),
                     const SizedBox(height: 40),
                     SizedBox(

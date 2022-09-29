@@ -113,3 +113,9 @@ Widget animatedColorsGrid(List<MyColor> colors, int index, Widget child) {
     child: child,
   );
 }
+
+bool isScreenSize500Above(BuildContext context) =>
+    MediaQuery.of(context).size.width >= 500;
+
+double authTextFieldWidth(BuildContext context) =>
+    MediaQuery.of(context).size.width / 2;

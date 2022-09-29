@@ -80,7 +80,7 @@ class _SignInPageState extends State<SignUpPage> {
                           }
                           return null;
                         },
-                        width: MediaQuery.of(context).size.width / 2,
+                        width: authTextFieldWidth(context),
                         color: MyColor.blueishIdk!),
                     const SizedBox(height: 20),
                     textField(
@@ -95,7 +95,7 @@ class _SignInPageState extends State<SignUpPage> {
                           }
                           return null;
                         },
-                        width: MediaQuery.of(context).size.width / 2,
+                        width: authTextFieldWidth(context),
                         color: MyColor.blueishIdk!),
                     const SizedBox(height: 20),
                     textField(
@@ -110,7 +110,7 @@ class _SignInPageState extends State<SignUpPage> {
                           }
                           return null;
                         },
-                        width: MediaQuery.of(context).size.width / 2,
+                        width: authTextFieldWidth(context),
                         color: MyColor.blueishIdk!),
                     const SizedBox(height: 40),
                     SizedBox(
@@ -143,7 +143,7 @@ class _SignInPageState extends State<SignUpPage> {
                           },
                           child: const Text("Sign Up")),
                     ),
-                    if (MediaQuery.of(context).size.width >= 500)
+                    if (isScreenSize500Above(context))
                       Lottie.asset('arrow_down_lottie.json')
                   ]),
             ),

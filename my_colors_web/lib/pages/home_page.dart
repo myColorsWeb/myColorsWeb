@@ -114,7 +114,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   Padding colorsGrid(List<MyColor> colors) {
     var count = 2;
-    if (MediaQuery.of(context).size.width >= 500) {
+    if (isScreenSize500Above(context)) {
       count = 4;
     }
     return Padding(
@@ -197,7 +197,7 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   Widget showSearchButtonAppBar() {
-    var shouldShow = MediaQuery.of(context).size.width >= 500;
+    var shouldShow = isScreenSize500Above(context);
     if (shouldShow) {
       return Padding(
         padding: const EdgeInsets.only(top: 15),
@@ -393,7 +393,7 @@ class _MyHomePageState extends State<MyHomePage> {
             return const Center(child: CircularProgressIndicator());
           },
         ),
-        floatingActionButton: MediaQuery.of(context).size.width < 500
+        floatingActionButton: !isScreenSize500Above(context)
             ? FloatingActionButton(
                 backgroundColor: MyColor.blueishIdk,
                 onPressed: () {
