@@ -207,7 +207,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     MaterialStateProperty.all<Color>(Colors.white)),
             onPressed: () {
               FocusManager.instance.primaryFocus?.unfocus();
-              if(_formKey.currentState!.validate()) {
+              if (_formKey.currentState!.validate()) {
                 search();
               }
             },
@@ -233,6 +233,10 @@ class _MyHomePageState extends State<MyHomePage> {
                 return "";
               } else if (!additionalInfo.contains(s.toUpperCase())) {
                 makeToast("Please enter a valid color");
+                if (isSignedInAndVerified) {
+                  additionalInfo.add(
+                      "\nSigned In as ${FirebaseAuth.instance.currentUser!.email}");
+                }
                 showInfo();
                 return "";
               }
