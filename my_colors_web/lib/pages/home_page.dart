@@ -73,6 +73,15 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
+  void searchRandom() {
+    setState(() {
+      randIntStr = (Random().nextInt(12) + 2).toString();
+      _colorController.text = random;
+      _countController.text = randIntStr;
+      myColors = getColors(random, randIntStr);
+    });
+  }
+
   void showInfo() {
     showDialogPlus(
         context: context,
@@ -110,73 +119,79 @@ class _MyHomePageState extends State<MyHomePage> {
     }
     return Padding(
         padding: const EdgeInsets.all(15.0),
-        child: GridView.builder(
-            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-              childAspectRatio: 1 / .5,
-              crossAxisCount: count,
-              crossAxisSpacing: 10,
-              mainAxisSpacing: 10,
-            ),
-            itemCount: colors.length,
-            itemBuilder: (_, index) {
-              String hex = colors[index].hex;
-              return animatedColorsGrid(
-                  colors,
-                  index,
-                  ScaleAnimation(
-                    child: InkWell(
-                      onTap: () => showDialogPlus(
-                          context: context,
-                          title: Text("Selected Color",
-                              style: TextStyle(
-                                  color: MyColor.getColorFromHex(hex))),
-                          content: Container(
-                            width: MediaQuery.of(context).size.width / 5,
-                            height: MediaQuery.of(context).size.width / 5,
-                            decoration: BoxDecoration(
-                                color: MyColor.getColorFromHex(hex)),
-                            child: Center(
-                                child: Text(
-                              hex,
-                              style: const TextStyle(color: Colors.white),
-                            )),
-                          ),
-                          onSubmitTap: () {
-                            Navigator.pop(context);
-                          },
-                          onCancelTap: () {
-                            Clipboard.setData(ClipboardData(text: hex));
-                            Navigator.pop(context);
-                            makeToast("Copied $hex to Clipboard");
-                          },
-                          submitText: "Nice!",
-                          cancelText: "Copy to Clipboard"),
-                      onDoubleTap: () {
-                        Clipboard.setData(ClipboardData(text: hex));
-                        makeToast("Copied $hex to Clipboard");
-                      },
-                      onLongPress: () {
-                        if (isSignedInAndVerified) {
-                          FireStore.updateFavorites({hex: hex});
-                          makeToast("Saved $hex to Favorites");
-                        } else {
-                          showSignIn();
-                        }
-                      },
-                      child: Container(
-                        width: 15,
-                        height: 15,
-                        decoration:
-                            BoxDecoration(color: MyColor.getColorFromHex(hex)),
-                        child: Center(
-                            child: Text(
-                          hex,
-                          style: const TextStyle(color: Colors.white),
-                        )),
+        child: RefreshIndicator(
+          onRefresh: () {
+            searchRandom();
+            return Future.value(null);
+          },
+          child: GridView.builder(
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                childAspectRatio: 1 / .5,
+                crossAxisCount: count,
+                crossAxisSpacing: 10,
+                mainAxisSpacing: 10,
+              ),
+              itemCount: colors.length,
+              itemBuilder: (_, index) {
+                String hex = colors[index].hex;
+                return animatedColorsGrid(
+                    colors,
+                    index,
+                    ScaleAnimation(
+                      child: InkWell(
+                        onTap: () => showDialogPlus(
+                            context: context,
+                            title: Text("Selected Color",
+                                style: TextStyle(
+                                    color: MyColor.getColorFromHex(hex))),
+                            content: Container(
+                              width: MediaQuery.of(context).size.width / 5,
+                              height: MediaQuery.of(context).size.width / 5,
+                              decoration: BoxDecoration(
+                                  color: MyColor.getColorFromHex(hex)),
+                              child: Center(
+                                  child: Text(
+                                hex,
+                                style: const TextStyle(color: Colors.white),
+                              )),
+                            ),
+                            onSubmitTap: () {
+                              Navigator.pop(context);
+                            },
+                            onCancelTap: () {
+                              Clipboard.setData(ClipboardData(text: hex));
+                              Navigator.pop(context);
+                              makeToast("Copied $hex to Clipboard");
+                            },
+                            submitText: "Nice!",
+                            cancelText: "Copy to Clipboard"),
+                        onDoubleTap: () {
+                          Clipboard.setData(ClipboardData(text: hex));
+                          makeToast("Copied $hex to Clipboard");
+                        },
+                        onLongPress: () {
+                          if (isSignedInAndVerified) {
+                            FireStore.updateFavorites({hex: hex});
+                            makeToast("Saved $hex to Favorites");
+                          } else {
+                            showSignIn();
+                          }
+                        },
+                        child: Container(
+                          width: 15,
+                          height: 15,
+                          decoration: BoxDecoration(
+                              color: MyColor.getColorFromHex(hex)),
+                          child: Center(
+                              child: Text(
+                            hex,
+                            style: const TextStyle(color: Colors.white),
+                          )),
+                        ),
                       ),
-                    ),
-                  ));
-            }));
+                    ));
+              }),
+        ));
   }
 
   List<Widget> appBarChildren() => [
@@ -270,12 +285,7 @@ class _MyHomePageState extends State<MyHomePage> {
               onSelected: (value) {
                 switch (value) {
                   case 0 /*Random*/ :
-                    setState(() {
-                      randIntStr = (Random().nextInt(12) + 2).toString();
-                      _colorController.text = random;
-                      _countController.text = randIntStr;
-                      myColors = getColors(random, randIntStr);
-                    });
+                    searchRandom();
                     break;
                   case 1 /*Favorites*/ :
                     if (isSignedInAndVerified) {
