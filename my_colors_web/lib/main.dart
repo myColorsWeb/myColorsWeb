@@ -21,12 +21,13 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-
   @override
-  void initState() async {
+  void initState() {
     super.initState();
-    await FirebaseAnalytics.instance.logAppOpen();
+    logAppOpen();
   }
+
+  void logAppOpen() async => await FirebaseAnalytics.instance.logAppOpen();
 
   @override
   Widget build(BuildContext context) {
