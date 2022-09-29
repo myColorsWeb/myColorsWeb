@@ -334,24 +334,22 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
       ];
 
-  List<Widget> errorIconAndMsg(String errorMsg) => [
-        Center(
-            child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            const Icon(Icons.error, size: 60, color: Colors.white),
-            const SizedBox(height: 20),
-            const Text("Something went wrong.",
-                style: TextStyle(color: Colors.white, fontSize: 25)),
-            const Text("Reload the page and try again.",
-                style: TextStyle(color: Colors.white, fontSize: 25)),
-            const SizedBox(height: 10),
-            Text(errorMsg,
-                style: const TextStyle(color: Colors.white, fontSize: 15))
-          ],
-        ))
-      ];
+  Center errorIconAndMsg(String errorMsg) => Center(
+          child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          const Icon(Icons.error, size: 60, color: Colors.white),
+          const SizedBox(height: 20),
+          const Text("Something went wrong.",
+              style: TextStyle(color: Colors.white, fontSize: 25)),
+          const Text("Reload the page and try again.",
+              style: TextStyle(color: Colors.white, fontSize: 25)),
+          const SizedBox(height: 10),
+          Text(errorMsg,
+              style: const TextStyle(color: Colors.white, fontSize: 15))
+        ],
+      ));
 
   void signInOut() {
     if (isSignedInAndVerified) {
@@ -395,11 +393,7 @@ class _MyHomePageState extends State<MyHomePage> {
             if (snapshot.hasData) {
               return colorsGrid(snapshot.data!);
             } else if (snapshot.hasError) {
-              return Center(
-                  child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: errorIconAndMsg("Error\n - ${snapshot.error}"),
-              ));
+              return errorIconAndMsg("Error\n - ${snapshot.error}");
             }
             return const Center(child: CircularProgressIndicator());
           },
