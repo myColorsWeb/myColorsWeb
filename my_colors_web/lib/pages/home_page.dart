@@ -160,6 +160,7 @@ class _MyHomePageState extends State<MyHomePage> {
         textField(
             context: context,
             width: MediaQuery.of(context).size.width / 5,
+            color: Colors.white,
             hintText: "Color",
             controller: _colorController,
             validator: (s) {
@@ -181,6 +182,7 @@ class _MyHomePageState extends State<MyHomePage> {
         textField(
             context: context,
             width: MediaQuery.of(context).size.width / 10,
+            color: Colors.white,
             hintText: "#",
             controller: _countController,
             validator: (s) {

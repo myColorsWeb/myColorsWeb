@@ -11,7 +11,8 @@ SizedBox textField(
     required TextEditingController controller,
     required void Function(String)? onFieldSubmitted,
     required String? Function(String?)? validator,
-    required double width}) {
+    required double width,
+    required Color color}) {
   return SizedBox(
     width: width,
     child: Theme(
@@ -23,16 +24,16 @@ SizedBox textField(
           controller: controller,
           textInputAction: TextInputAction.done,
           validator: validator,
-          style: const TextStyle(color: Colors.white),
-          cursorColor: Colors.white,
+          style: TextStyle(color: color),
+          cursorColor: color,
           decoration: InputDecoration(
-              enabledBorder: const UnderlineInputBorder(
+              enabledBorder: UnderlineInputBorder(
                   borderSide: BorderSide(
-                color: Colors.white,
+                color: color,
                 width: 2,
               )),
               hintText: hintText,
-              hintStyle: const TextStyle(color: Colors.white))),
+              hintStyle: TextStyle(color: color))),
     ),
   );
 }
