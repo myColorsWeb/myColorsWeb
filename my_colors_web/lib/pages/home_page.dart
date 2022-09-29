@@ -206,7 +206,9 @@ class _MyHomePageState extends State<MyHomePage> {
                 backgroundColor:
                     MaterialStateProperty.all<Color>(Colors.white)),
             onPressed: () {
-              search();
+              if(_formKey.currentState!.validate()) {
+                search();
+              }
             },
             child: Text(
               "Search",
