@@ -72,7 +72,8 @@ class _MyHomePageState extends State<MyHomePage> {
       if (searchRandom) {
         myColors = getColors(random, randIntStr);
       } else {
-        myColors = getColors(_colorController.text.toLowerCase(), randIntStr);
+        myColors = getColors(
+            _colorController.text.toLowerCase(), _countController.text);
       }
     });
   }
