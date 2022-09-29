@@ -147,7 +147,7 @@ class _SignInPageState extends State<SignUpPage> {
                       ]),
                 ),
               ),
-              const SizedBox(width: 100),
+              SizedBox(width: MediaQuery.of(context).size.width / 15),
               Lottie.asset('arrow_down_lottie.json')
             ],
           ),
