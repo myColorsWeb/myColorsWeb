@@ -17,7 +17,7 @@ class _SignInPageState extends State<SignInPage> {
   final _formKey = GlobalKey<FormState>();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
-  
+
   @override
   void dispose() {
     super.dispose();
@@ -38,8 +38,9 @@ class _SignInPageState extends State<SignInPage> {
               child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    if (isScreenWidth500Above(context))
-                      Lottie.asset('arrow_up_lottie.json'),
+                    isScreenWidth500Above(context)
+                        ? Lottie.asset('arrow_up_lottie.json')
+                        : Lottie.asset('arrow_up_35.json'),
                     Text("Sign In",
                         style:
                             TextStyle(color: MyColor.blueishIdk, fontSize: 30)),

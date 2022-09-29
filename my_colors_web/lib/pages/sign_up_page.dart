@@ -146,8 +146,9 @@ class _SignInPageState extends State<SignUpPage> {
                           },
                           child: const Text("Sign Up")),
                     ),
-                    if (isScreenWidth500Above(context))
-                      Lottie.asset('arrow_down_lottie.json')
+                    isScreenWidth500Above(context)
+                        ? Lottie.asset('arrow_down_lottie.json')
+                        : Lottie.asset('arrow_down_35.json'),
                   ]),
             ),
           ),

@@ -69,6 +69,8 @@ flutter:
   assets:
     - arrow_down_lottie.json
     - arrow_up_lottie.json
+    - arrow_down_35.json
+    - arrow_up_35.json
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
