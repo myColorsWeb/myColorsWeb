@@ -37,7 +37,8 @@ class _SignInPageState extends State<SignInPage> {
               child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Lottie.asset('arrow_up_lottie.json'),
+                    if (MediaQuery.of(context).size.width >= 500)
+                      Lottie.asset('arrow_up_lottie.json'),
                     Text("Sign In",
                         style:
                             TextStyle(color: MyColor.blueishIdk, fontSize: 30)),

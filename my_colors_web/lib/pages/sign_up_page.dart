@@ -141,7 +141,8 @@ class _SignInPageState extends State<SignUpPage> {
                           },
                           child: const Text("Sign Up")),
                     ),
-                    Lottie.asset('arrow_down_lottie.json')
+                    if (MediaQuery.of(context).size.width >= 500)
+                      Lottie.asset('arrow_down_lottie.json')
                   ]),
             ),
           ),
