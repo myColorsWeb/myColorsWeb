@@ -201,7 +201,7 @@ class _MyHomePageState extends State<MyHomePage> {
           switch (value) {
             case 0 /*Random*/ :
               setState(() {
-                randIntStr = Random().nextInt(12).toString();
+                randIntStr = (Random().nextInt(12) + 2).toString();
                 _colorController.text = random;
                 _countController.text = randIntStr;
                 myColors = getColors(random, randIntStr);
