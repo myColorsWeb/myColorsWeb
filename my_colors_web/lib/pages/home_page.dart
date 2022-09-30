@@ -73,8 +73,7 @@ class _MyHomePageState extends State<MyHomePage> {
   void search() async {
     var color = _colorController.text.toLowerCase();
     setState(() {
-      myColors =
-          getColors(color, _countController.text);
+      myColors = getColors(color, _countController.text);
     });
     await FirebaseAnalytics.instance.logSearch(searchTerm: color);
   }
@@ -89,7 +88,7 @@ class _MyHomePageState extends State<MyHomePage> {
     await FirebaseAnalytics.instance.logSearch(searchTerm: random);
   }
 
-  void showInfo() {
+  void showInfoDialog() {
     showDialogPlus(
         context: context,
         title: Text("Colors to Search",
@@ -102,7 +101,7 @@ class _MyHomePageState extends State<MyHomePage> {
         cancelText: "");
   }
 
-  void showSignIn() {
+  void showSignInDialog() {
     showDialogPlus(
         context: context,
         title: Text("Sign In", style: TextStyle(color: MyColor.blueishIdk)),
@@ -120,10 +119,6 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   Padding colorsGrid(List<MyColor> colors) {
-    var count = 2;
-    if (isScreenWidth500Above(context)) {
-      count = 4;
-    }
     return Padding(
         padding: const EdgeInsets.all(15.0),
         child: RefreshIndicator(
@@ -136,7 +131,7 @@ class _MyHomePageState extends State<MyHomePage> {
           child: GridView.builder(
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                 childAspectRatio: 1 / .5,
-                crossAxisCount: count,
+                crossAxisCount: isScreenWidth500Above(context) ? 4 : 2,
                 crossAxisSpacing: 10,
                 mainAxisSpacing: 10,
               ),
@@ -183,7 +178,7 @@ class _MyHomePageState extends State<MyHomePage> {
                             FireStore.updateFavorites({hex: hex});
                             makeToast("Saved $hex to Favorites");
                           } else {
-                            showSignIn();
+                            showSignInDialog();
                           }
                         },
                         child: Container(
@@ -240,7 +235,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 return "";
               } else if (!additionalInfo().contains(s.toUpperCase())) {
                 makeToast("Please enter a valid color");
-                showInfo();
+                showInfoDialog();
                 return "";
               }
               return null;
@@ -329,11 +324,11 @@ class _MyHomePageState extends State<MyHomePage> {
                           MaterialPageRoute(
                               builder: (context) => const FavoritesPage()));
                     } else {
-                      showSignIn();
+                      showSignInDialog();
                     }
                     break;
                   case 2 /*Info*/ :
-                    showInfo();
+                    showInfoDialog();
                     break;
                   case 3 /*Sign Out*/ :
                     signInOut();
@@ -406,7 +401,8 @@ class _MyHomePageState extends State<MyHomePage> {
             } else if (snapshot.hasError) {
               return errorIconAndMsg("Error\n - ${snapshot.error}");
             }
-            return const Center(child: CircularProgressIndicator());
+            return Center(
+                child: CircularProgressIndicator(color: MyColor.blueishIdk));
           },
         ),
         floatingActionButton: !isScreenWidth500Above(context)
