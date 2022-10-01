@@ -43,7 +43,7 @@ class _FavoritesState extends State<FavoritesPage> {
                     })),
             const SizedBox(height: 30),
             Text(
-              "Double-Click to a color copy\nLong-Press a color to remove",
+              "Double-Click a color copy\nLong-Press a color to remove",
               style: TextStyle(color: MyColor.blueishIdk),
             )
           ],
