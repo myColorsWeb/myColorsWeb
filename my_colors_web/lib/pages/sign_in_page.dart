@@ -6,6 +6,8 @@ import 'package:my_colors_web/firebase/fire_auth.dart';
 import 'package:my_colors_web/pages/home_page.dart';
 import 'package:my_colors_web/utils/utils.dart';
 
+import '../utils/validator.dart';
+
 class SignInPage extends StatefulWidget {
   const SignInPage({super.key});
 
@@ -17,6 +19,8 @@ class _SignInPageState extends State<SignInPage> {
   final _formKey = GlobalKey<FormState>();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
+
+  var _isPasswordObscured = true;
 
   @override
   void dispose() {
@@ -54,29 +58,33 @@ class _SignInPageState extends State<SignInPage> {
                         hintText: "Email",
                         controller: _emailController,
                         onFieldSubmitted: (s) {},
-                        validator: (s) {
-                          if (s == null || s.isEmpty) {
-                            return "Please provide a value";
-                          }
-                          return null;
-                        },
+                        validator: (s) => Validator.validateEmail(s),
                         width: authTextFieldWidth(context),
                         color: MyColor.blueishIdk!),
                     const SizedBox(height: 20),
                     textField(
-                        context: context,
-                        hintText: "Password",
-                        controller: _passwordController,
-                        maxLen: 20,
-                        onFieldSubmitted: (s) {},
-                        validator: (s) {
-                          if (s == null || s.isEmpty) {
-                            return "Please provide a value";
-                          }
-                          return null;
-                        },
-                        width: authTextFieldWidth(context),
-                        color: MyColor.blueishIdk!),
+                      context: context,
+                      hintText: "Password",
+                      controller: _passwordController,
+                      maxLen: 20,
+                      onFieldSubmitted: (s) {},
+                      validator: (s) => Validator.validatePassword(s,
+                          showValidPassMsg: false),
+                      width: authTextFieldWidth(context),
+                      color: MyColor.blueishIdk!,
+                      obscureText: _isPasswordObscured,
+                      includeSuffixIcon: true,
+                      suffixIcon: InkWell(
+                        onTap: () => setState(() {
+                          _isPasswordObscured = !_isPasswordObscured;
+                        }),
+                        child: Icon(
+                            _isPasswordObscured
+                                ? Icons.visibility_off
+                                : Icons.visibility,
+                            color: MyColor.blueishIdk),
+                      ),
+                    ),
                     const SizedBox(height: 40),
                     SizedBox(
                       height: 50,

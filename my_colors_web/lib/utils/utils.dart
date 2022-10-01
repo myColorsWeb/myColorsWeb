@@ -14,6 +14,9 @@ SizedBox textField(
     TextInputType? keyboardType = TextInputType.text,
     required double width,
     required Color color,
+    bool obscureText = false,
+    bool includeSuffixIcon = false,
+    Widget? suffixIcon,
     int maxLen = 40}) {
   return SizedBox(
     width: width,
@@ -30,7 +33,10 @@ SizedBox textField(
           style: TextStyle(color: color),
           keyboardType: keyboardType,
           cursorColor: color,
+          obscureText: obscureText,
+          obscuringCharacter: "!",
           decoration: InputDecoration(
+              suffixIcon: includeSuffixIcon ? suffixIcon : null,
               counterText: "",
               counterStyle: TextStyle(color: MyColor.blueishIdk),
               enabledBorder: UnderlineInputBorder(
