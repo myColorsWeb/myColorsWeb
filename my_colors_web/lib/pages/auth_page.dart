@@ -34,15 +34,16 @@ class _AuthPageState extends State<AuthPage> {
           floatingActionButton: FloatingActionButton(
               backgroundColor: MyColor.blueishIdk,
               onPressed: () => setState(() {
-                    _isShowingSignIn = !_isShowingSignIn;
-                    if (!_isShowingSignIn) {
+                    if (_isShowingSignIn) {
                       controller.animateToPage(0,
                           duration: const Duration(milliseconds: 300),
                           curve: Curves.easeOut);
+                      _isShowingSignIn = false;
                     } else {
                       controller.animateToPage(1,
                           duration: const Duration(milliseconds: 300),
                           curve: Curves.easeIn);
+                      _isShowingSignIn = true;
                     }
                   }),
               child: _isShowingSignIn
