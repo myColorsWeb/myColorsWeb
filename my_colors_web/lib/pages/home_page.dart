@@ -289,8 +289,11 @@ class _MyHomePageState extends State<MyHomePage> {
                 return [
                   PopupMenuItem<int>(
                     value: 0,
-                    child: Text("Random",
-                        style: TextStyle(color: MyColor.blueishIdk)),
+                    child: isSignedInAndVerified
+                        ? Text("Sign Out",
+                            style: TextStyle(color: MyColor.blueishIdk))
+                        : Text("Sign In",
+                            style: TextStyle(color: MyColor.blueishIdk)),
                   ),
                   PopupMenuItem<int>(
                     value: 1,
@@ -302,20 +305,12 @@ class _MyHomePageState extends State<MyHomePage> {
                     child: Text("Info",
                         style: TextStyle(color: MyColor.blueishIdk)),
                   ),
-                  PopupMenuItem<int>(
-                    value: 3,
-                    child: isSignedInAndVerified
-                        ? Text("Sign Out",
-                            style: TextStyle(color: MyColor.blueishIdk))
-                        : Text("Sign In",
-                            style: TextStyle(color: MyColor.blueishIdk)),
-                  ),
                 ];
               },
               onSelected: (value) {
                 switch (value) {
-                  case 0 /*Random*/ :
-                    searchRandom();
+                  case 0 /*Sign In & Out*/ :
+                    signInOut();
                     break;
                   case 1 /*Favorites*/ :
                     if (isSignedInAndVerified) {
@@ -329,9 +324,6 @@ class _MyHomePageState extends State<MyHomePage> {
                     break;
                   case 2 /*Info*/ :
                     showInfoDialog();
-                    break;
-                  case 3 /*Sign Out*/ :
-                    signInOut();
                     break;
                 }
               },
