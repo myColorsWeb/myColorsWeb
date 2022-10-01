@@ -1,6 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:my_colors_web/firebase/firestore.dart';
-import 'package:my_colors_web/utils/utils.dart';
+import '../firebase/firestore.dart';
+import '../utils/utils.dart';
 import 'dart:developer' as dev;
 
 class FireAuth {

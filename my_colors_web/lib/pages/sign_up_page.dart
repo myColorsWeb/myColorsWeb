@@ -1,9 +1,9 @@
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
-import 'package:my_colors_web/data/local/my_color.dart';
-import 'package:my_colors_web/utils/utils.dart';
+import '../data/local/my_color.dart';
+import '../utils/utils.dart';
 import 'package:lottie/lottie.dart';
-import 'package:my_colors_web/utils/validator.dart';
+import '../utils/validator.dart';
 
 import '../firebase/fire_auth.dart';
 import 'home_page.dart';

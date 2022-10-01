@@ -1,7 +1,7 @@
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:my_colors_web/pages/auth_page.dart';
+import '../pages/auth_page.dart';
 import '../data/remote/api_service.dart';
 import 'favorites_page.dart';
 import '../firebase/fire_auth.dart';

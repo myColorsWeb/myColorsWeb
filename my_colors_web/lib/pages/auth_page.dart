@@ -1,7 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:my_colors_web/data/local/my_color.dart';
-import 'package:my_colors_web/pages/sign_up_page.dart';
-
+import '../data/local/my_color.dart';
+import '../pages/sign_up_page.dart';
 import 'sign_in_page.dart';
 import 'package:flutter/material.dart';
 
