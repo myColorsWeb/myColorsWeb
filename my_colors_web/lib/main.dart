@@ -1,9 +1,9 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:my_colors_web/data/local/my_color.dart';
-
-import 'firebase/firebase_options.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
+
+import 'data/local/my_color.dart';
+import 'firebase/firebase_options.dart';
 import 'pages/home_page.dart';
 
 void main() async {

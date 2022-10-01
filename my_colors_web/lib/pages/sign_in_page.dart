@@ -1,12 +1,11 @@
 import 'package:firebase_analytics/firebase_analytics.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
-import 'package:my_colors_web/data/local/my_color.dart';
-import 'package:my_colors_web/firebase/fire_auth.dart';
-import 'package:my_colors_web/pages/home_page.dart';
-import 'package:my_colors_web/utils/utils.dart';
 
+import '../data/local/my_color.dart';
+import '../firebase/fire_auth.dart';
+import '../pages/home_page.dart';
+import '../utils/utils.dart';
 import '../utils/validator.dart';
 
 class SignInPage extends StatefulWidget {
