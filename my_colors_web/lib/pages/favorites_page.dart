@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_colorpicker/flutter_colorpicker.dart';
+import 'package:my_colors_web/firebase/fire_auth.dart';
 
 import '../firebase/firestore.dart';
 import '../data/local/my_color.dart';
+import '../firebase/firestore.dart';
+import '../firebase/firestore.dart';
 import '../utils/utils.dart';
 
 class FavoritesPage extends StatefulWidget {
@@ -27,7 +31,34 @@ class _FavoritesState extends State<FavoritesPage> {
     });
   }
 
-  Padding favoritesGrid(List<MyColor> colors) {
+  void _showColorPickerDialog() {
+    Color selectedColor = Colors.white;
+    showDialogPlus(
+        context: context,
+        title: Text("Pick Theme Color", style: TextStyle(color: MyColor.blueishIdk)),
+        content: ColorPicker(
+            enableAlpha: false,
+            labelTypes: const [],
+            pickerColor: MyColor.blueishIdk!,
+            onColorChanged: (color) => setState(() {
+                  selectedColor = color;
+                })),
+        onSubmitTap: () {
+          Navigator.pop(context);
+          var intColor = selectedColor.value;
+          var hex =
+              "#${intColor.toRadixString(16).padLeft(6, '0').substring(2).toUpperCase()}";
+          setState(() {
+            _favColors.add(MyColor(hex: hex));
+          });
+          FireStore.updateFavorites({hex: hex});
+        },
+        onCancelTap: null,
+        submitText: "Save",
+        cancelText: "");
+  }
+
+  Padding _favoritesGrid(List<MyColor> colors) {
     return Padding(
         padding: const EdgeInsets.all(15.0),
         child: GridView.builder(
@@ -74,7 +105,15 @@ class _FavoritesState extends State<FavoritesPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.grey[900],
-      body: favoritesGrid(_favColors),
+      body: _favoritesGrid(_favColors),
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: MyColor.blueishIdk,
+        onPressed: () {
+          FocusManager.instance.primaryFocus?.unfocus();
+          _showColorPickerDialog();
+        },
+        child: const Icon(Icons.add),
+      ),
     );
   }
 }
