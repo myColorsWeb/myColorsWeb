@@ -47,7 +47,7 @@ class _MyHomePageState extends State<MyHomePage> {
         "YELLOW",
         "ORANGE",
         "RANDOM",
-        "\n* Double-Click to Copy\n* Long-Press to Save",
+        "\n* Double-Click to copy\n* Long-Press to save",
         isSignedInAndVerified
             ? "\nSigned In as ${FirebaseAuth.instance.currentUser!.email}"
             : ""
@@ -105,7 +105,7 @@ class _MyHomePageState extends State<MyHomePage> {
     showDialogPlus(
         context: context,
         title: Text("Sign In", style: TextStyle(color: MyColor.blueishIdk)),
-        content: Text("You must Sign In before saving / accessing Favorites.",
+        content: Text("You must Sign In before using Favorites.",
             style: TextStyle(color: MyColor.blueishIdk)),
         onSubmitTap: () {
           Navigator.pop(context);

@@ -15,13 +15,14 @@ class AuthPage extends StatefulWidget {
 class _AuthPageState extends State<AuthPage> {
   final controller = PageController(initialPage: 1);
 
-  var isSignedIn = FirebaseAuth.instance.currentUser != null;
+  final _isSignedIn = FirebaseAuth.instance.currentUser != null;
+  var _isShowingSignIn = true;
 
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () {
-        Navigator.pop(context, isSignedIn);
+        Navigator.pop(context, _isSignedIn);
         return Future.value(false);
       },
       child: RawScrollbar(
@@ -29,10 +30,29 @@ class _AuthPageState extends State<AuthPage> {
         controller: controller,
         thumbVisibility: true,
         trackVisibility: true,
-        child: PageView(
-          controller: controller,
-          scrollDirection: Axis.vertical,
-          children: const [SignUpPage(), SignInPage()],
+        child: Scaffold(
+          floatingActionButton: FloatingActionButton(
+              backgroundColor: MyColor.blueishIdk,
+              onPressed: () => setState(() {
+                    _isShowingSignIn = !_isShowingSignIn;
+                    if (!_isShowingSignIn) {
+                      controller.animateToPage(0,
+                          duration: const Duration(milliseconds: 300),
+                          curve: Curves.easeOut);
+                    } else {
+                      controller.animateToPage(1,
+                          duration: const Duration(milliseconds: 300),
+                          curve: Curves.easeIn);
+                    }
+                  }),
+              child: _isShowingSignIn
+                  ? const Icon(Icons.arrow_drop_up)
+                  : const Icon(Icons.arrow_drop_down)),
+          body: PageView(
+            controller: controller,
+            scrollDirection: Axis.vertical,
+            children: const [SignUpPage(), SignInPage()],
+          ),
         ),
       ),
     );

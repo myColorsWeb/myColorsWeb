@@ -21,10 +21,10 @@ class Validator {
   }
 
   static const passwordSpecifications = """
-      \n- 8 characters
-      \n- One letter
-      \n- One number
-      \n- One special character
+      \n* 8 - 20 characters in length
+      \n* At least One letter
+      \n* At least One number
+      \n* At least One special character
     """;
 
   static String? validateEmail(String? s) {

@@ -49,7 +49,7 @@ class _SignInPageState extends State<SignInPage> {
                         style:
                             TextStyle(color: MyColor.blueishIdk, fontSize: 30)),
                     const SizedBox(height: 15),
-                    Text("Access your Favs\nvia web or Android",
+                    Text("to save your Favorite colors",
                         style:
                             TextStyle(color: MyColor.blueishIdk, fontSize: 14)),
                     const SizedBox(height: 40),

@@ -1,12 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
-import 'package:my_colors_web/firebase/fire_auth.dart';
-
 import '../firebase/firestore.dart';
 import '../data/local/my_color.dart';
-import '../firebase/firestore.dart';
-import '../firebase/firestore.dart';
 import '../utils/utils.dart';
 
 class FavoritesPage extends StatefulWidget {
@@ -35,14 +31,23 @@ class _FavoritesState extends State<FavoritesPage> {
     Color selectedColor = Colors.white;
     showDialogPlus(
         context: context,
-        title: Text("Pick Theme Color", style: TextStyle(color: MyColor.blueishIdk)),
-        content: ColorPicker(
-            enableAlpha: false,
-            labelTypes: const [],
-            pickerColor: MyColor.blueishIdk!,
-            onColorChanged: (color) => setState(() {
-                  selectedColor = color;
-                })),
+        title: Text("Add Color", style: TextStyle(color: MyColor.blueishIdk)),
+        content: Column(
+          children: [
+            ColorPicker(
+                enableAlpha: false,
+                labelTypes: const [],
+                pickerColor: MyColor.blueishIdk!,
+                onColorChanged: (color) => setState(() {
+                      selectedColor = color;
+                    })),
+            const SizedBox(height: 30),
+            Text(
+              "Double-Click to a color copy\nLong-Press a color to remove",
+              style: TextStyle(color: MyColor.blueishIdk),
+            )
+          ],
+        ),
         onSubmitTap: () {
           Navigator.pop(context);
           var intColor = selectedColor.value;

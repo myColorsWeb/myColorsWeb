@@ -34,7 +34,7 @@ SizedBox textField(
           keyboardType: keyboardType,
           cursorColor: color,
           obscureText: obscureText,
-          obscuringCharacter: "!",
+          obscuringCharacter: "*",
           decoration: InputDecoration(
               suffixIcon: includeSuffixIcon ? suffixIcon : null,
               counterText: "",
