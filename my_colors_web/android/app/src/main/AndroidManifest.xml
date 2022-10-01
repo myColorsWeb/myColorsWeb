@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.my_colors_web">
    <application
-        android:label="my_colors_web"
+        android:label="myColorsWeb"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity
