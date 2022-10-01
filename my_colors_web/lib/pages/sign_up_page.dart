@@ -161,7 +161,7 @@ class _SignInPageState extends State<SignUpPage> {
                                   showEmailVerificationDialog();
                                   var user =
                                       await FireAuth.registerUsingEmailPassword(
-                                          email: _emailController.text,
+                                          email: _emailController.text.toLowerCase(),
                                           password: _passwordController.text,
                                           onResend: (() {
                                             Navigator.pop(context);

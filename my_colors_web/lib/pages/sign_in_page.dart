@@ -94,7 +94,7 @@ class _SignInPageState extends State<SignInPage> {
                             if (_formKey.currentState!.validate()) {
                               var user =
                                   await FireAuth.signInUsingEmailPassword(
-                                      email: _emailController.text,
+                                      email: _emailController.text.toLowerCase(),
                                       password: _passwordController.text);
                               if (user != null) {
                                 await FirebaseAnalytics.instance.logLogin();
