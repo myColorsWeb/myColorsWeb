@@ -16,6 +16,7 @@ A simple but useful app, allowing one to generate colors
 
 - ### Favorites
   - A persistant list of favorited colors
+  - Features a Color picker which allows one to add a custom color to Favorites
   - You must create an account to use Favorites
   
 - ### Animations
