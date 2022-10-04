@@ -1,4 +1,4 @@
-# myColors
+# myColorsWeb
 
 A simple but useful app, allowing one to generate colors
 
