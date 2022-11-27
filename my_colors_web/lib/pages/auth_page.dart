@@ -15,7 +15,6 @@ class _AuthPageState extends State<AuthPage> {
   final controller = PageController(initialPage: 1);
 
   final _isSignedIn = FirebaseAuth.instance.currentUser != null;
-  var _isShowingSignIn = true;
 
   @override
   Widget build(BuildContext context) {
@@ -30,28 +29,19 @@ class _AuthPageState extends State<AuthPage> {
         thumbVisibility: true,
         trackVisibility: true,
         child: Scaffold(
-          floatingActionButton: FloatingActionButton(
-              backgroundColor: MyColor.blueishIdk,
-              onPressed: () => setState(() {
-                    if (_isShowingSignIn) {
-                      controller.animateToPage(0,
-                          duration: const Duration(milliseconds: 300),
-                          curve: Curves.easeOut);
-                      _isShowingSignIn = false;
-                    } else {
-                      controller.animateToPage(1,
-                          duration: const Duration(milliseconds: 300),
-                          curve: Curves.easeIn);
-                      _isShowingSignIn = true;
-                    }
-                  }),
-              child: _isShowingSignIn
-                  ? const Icon(Icons.arrow_drop_up)
-                  : const Icon(Icons.arrow_drop_down)),
           body: PageView(
             controller: controller,
             scrollDirection: Axis.vertical,
-            children: const [SignUpPage(), SignInPage()],
+            children: [
+              SignUpPage(
+                  onNavigate: () => controller.animateToPage(1,
+                      duration: const Duration(milliseconds: 300),
+                      curve: Curves.easeIn)),
+              SignInPage(
+                  onNavigate: () => controller.animateToPage(0,
+                      duration: const Duration(milliseconds: 300),
+                      curve: Curves.easeOut))
+            ],
           ),
         ),
       ),

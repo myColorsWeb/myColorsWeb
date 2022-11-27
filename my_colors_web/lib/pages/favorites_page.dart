@@ -109,6 +109,7 @@ class _FavoritesState extends State<FavoritesPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(),
       backgroundColor: Colors.grey[900],
       body: _favoritesGrid(_favColors),
       floatingActionButton: FloatingActionButton(

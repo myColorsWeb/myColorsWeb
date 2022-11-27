@@ -9,7 +9,9 @@ import '../utils/utils.dart';
 import '../utils/validator.dart';
 
 class SignInPage extends StatefulWidget {
-  const SignInPage({super.key});
+  const SignInPage({super.key, required this.onNavigate});
+
+  final void Function() onNavigate;
 
   @override
   State<SignInPage> createState() => _SignInPageState();
@@ -87,8 +89,12 @@ class _SignInPageState extends State<SignInPage> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     isScreenWidth500Above(context)
-                        ? Lottie.asset('arrow_up_lottie.json')
-                        : Lottie.asset('arrow_up_35.json'),
+                        ? InkWell(
+                            onTap: widget.onNavigate,
+                            child: Lottie.asset('arrow_up_lottie.json'))
+                        : InkWell(
+                            onTap: widget.onNavigate,
+                            child: Lottie.asset('arrow_up_35.json')),
                     Text("Sign In",
                         style:
                             TextStyle(color: MyColor.blueishIdk, fontSize: 30)),

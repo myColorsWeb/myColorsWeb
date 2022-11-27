@@ -9,7 +9,9 @@ import '../firebase/fire_auth.dart';
 import 'home_page.dart';
 
 class SignUpPage extends StatefulWidget {
-  const SignUpPage({super.key});
+  const SignUpPage({super.key, required this.onNavigate});
+
+  final void Function() onNavigate;
 
   @override
   State<SignUpPage> createState() => _SignInPageState();
@@ -161,7 +163,8 @@ class _SignInPageState extends State<SignUpPage> {
                                   showEmailVerificationDialog();
                                   var user =
                                       await FireAuth.registerUsingEmailPassword(
-                                          email: _emailController.text.toLowerCase(),
+                                          email: _emailController.text
+                                              .toLowerCase(),
                                           password: _passwordController.text,
                                           onResend: (() {
                                             Navigator.pop(context);
@@ -191,8 +194,12 @@ class _SignInPageState extends State<SignUpPage> {
                       ],
                     ),
                     isScreenWidth500Above(context)
-                        ? Lottie.asset('arrow_down_lottie.json')
-                        : Lottie.asset('arrow_down_35.json'),
+                        ? InkWell(
+                            onTap: widget.onNavigate,
+                            child: Lottie.asset('arrow_down_lottie.json'))
+                        : InkWell(
+                            onTap: widget.onNavigate,
+                            child: Lottie.asset('arrow_down_35.json')),
                   ]),
             ),
           ),

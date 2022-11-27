@@ -71,9 +71,9 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   void search() async {
-    var color = _colorController.text.toLowerCase();
+    var color = _colorController.text.trim();
     setState(() {
-      myColors = getColors(color, _countController.text);
+      myColors = getColors(color, _countController.text.trim());
     });
     await FirebaseAnalytics.instance.logSearch(searchTerm: color);
   }
@@ -233,7 +233,7 @@ class _MyHomePageState extends State<MyHomePage> {
             validator: (s) {
               if (s == null || s.isEmpty) {
                 return "";
-              } else if (!additionalInfo().contains(s.toUpperCase())) {
+              } else if (!additionalInfo().contains(s.toUpperCase().trim())) {
                 makeToast("Please enter a valid color");
                 showInfoDialog();
                 return "";
